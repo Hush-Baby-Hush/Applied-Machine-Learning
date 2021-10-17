@@ -1,0 +1,645 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:03.240
+This is David Forsyth from the University of Illinois,
+
+2
+00:00:03.240 --> 00:00:08.330
+and I'm going to start talking about choosing the regularization constant for an SVM.
+
+3
+00:00:08.330 --> 00:00:12.890
+Now, I need to choose the regularization constant lambda.
+
+4
+00:00:12.890 --> 00:00:14.670
+Remember I said I didn't know the number,
+
+5
+00:00:14.670 --> 00:00:17.525
+but this is just like the choice of modeling Naive Bayes.
+
+6
+00:00:17.525 --> 00:00:22.500
+Remember in Naive Bayes we had a situation where we had several different models,
+
+7
+00:00:22.500 --> 00:00:25.280
+we had to figure out which one we wanted to use.
+
+8
+00:00:25.280 --> 00:00:28.290
+Here we have several different possible values of lambda,
+
+9
+00:00:28.290 --> 00:00:32.370
+we want to figure out which one to use. So, there are some rules.
+
+10
+00:00:32.370 --> 00:00:34.075
+Remember from Naive Bayes,
+
+11
+00:00:34.075 --> 00:00:36.285
+I wanted to choose one of M models,
+
+12
+00:00:36.285 --> 00:00:39.645
+these models have different values of the regularization constant.
+
+13
+00:00:39.645 --> 00:00:44.835
+Many years of experimental work suggest that performance
+
+14
+00:00:44.835 --> 00:00:50.155
+is not particularly twitchy about the value of the regularization constant.
+
+15
+00:00:50.155 --> 00:00:58.710
+So, typically you might look at values like 0.1, 1,
+
+16
+00:00:58.710 --> 00:01:05.057
+10 or 0.01, 0.1,
+
+17
+00:01:05.057 --> 00:01:08.465
+1 or something of that sort.
+
+18
+00:01:08.465 --> 00:01:10.060
+What's the big point here?
+
+19
+00:01:10.060 --> 00:01:13.000
+The big point is changing the regularization
+
+20
+00:01:13.000 --> 00:01:16.690
+constant by a factor of about 10 will usually get you some action,
+
+21
+00:01:16.690 --> 00:01:19.105
+changing it by adding
+
+22
+00:01:19.105 --> 00:01:22.330
+2 percent isn't going to change anything at all which is really convenient.
+
+23
+00:01:22.330 --> 00:01:26.500
+So, I'll set up 10 or 20 different values changing by decades or
+
+24
+00:01:26.500 --> 00:01:30.895
+maybe factors of 3 if I'm nervous and then I'll look at each different one.
+
+25
+00:01:30.895 --> 00:01:33.520
+That forms my M models.
+
+26
+00:01:33.520 --> 00:01:38.970
+Now, the rules are I can't evaluate a model on data I use to fit it,
+
+27
+00:01:38.970 --> 00:01:43.195
+because I fitted the model to do well on that data so the value will be wrong.
+
+28
+00:01:43.195 --> 00:01:45.760
+I can't evaluate a model on data I used to choose
+
+29
+00:01:45.760 --> 00:01:48.605
+it because I chose the model to do well on that data.
+
+30
+00:01:48.605 --> 00:01:53.485
+And finally, I want the best possible estimate of the parameters.
+
+31
+00:01:53.485 --> 00:01:56.800
+So, here's our procedure as in last time.
+
+32
+00:01:56.800 --> 00:01:59.380
+I'm going to split the label data into two sets,
+
+33
+00:01:59.380 --> 00:02:03.625
+I'm going to call them train and test and I will set test aside.
+
+34
+00:02:03.625 --> 00:02:05.400
+I'm not going to do anything with it for a minute.
+
+35
+00:02:05.400 --> 00:02:10.080
+Now, I will go to the train and I will
+
+36
+00:02:10.080 --> 00:02:14.980
+compute cross-validated error so I will split that into train and validate.
+
+37
+00:02:14.980 --> 00:02:18.460
+I will fit on train for a fixed value of
+
+38
+00:02:18.460 --> 00:02:23.485
+lambda and then I will evaluate and validate and I'll repeat.
+
+39
+00:02:23.485 --> 00:02:27.700
+I will do that for each of my different values of lambda.
+
+40
+00:02:27.700 --> 00:02:35.055
+Now, I have a cross-validated error for each value of lambda and it might look like this.
+
+41
+00:02:35.055 --> 00:02:44.909
+0.1, 1, 10, 0.01.
+
+42
+00:02:44.909 --> 00:02:49.200
+Over here I will have
+
+43
+00:02:49.200 --> 00:02:52.020
+somewhat higher cross-validated error and
+
+44
+00:02:52.020 --> 00:02:55.029
+I'm going to draw in an error bulb because I can.
+
+45
+00:02:55.029 --> 00:02:57.840
+Why? Because I didn't regularize enough.
+
+46
+00:02:57.840 --> 00:03:05.700
+Here I might have somewhat lower cross-validated error because I regularized just fine.
+
+47
+00:03:05.700 --> 00:03:08.180
+Here I regularized too much,
+
+48
+00:03:08.180 --> 00:03:11.340
+so my cross-validated error went
+
+49
+00:03:11.340 --> 00:03:17.795
+up and here I'd regularized a lot too much so it went up even more.
+
+50
+00:03:17.795 --> 00:03:19.506
+And I look at that and I say, okay,
+
+51
+00:03:19.506 --> 00:03:23.345
+well in this case pretty obviously the best value is 0.1.
+
+52
+00:03:23.345 --> 00:03:25.605
+Notice because I've got error bars,
+
+53
+00:03:25.605 --> 00:03:29.516
+I could choose the one that has the best value of error,
+
+54
+00:03:29.516 --> 00:03:30.960
+mean error, which would be this.
+
+55
+00:03:30.960 --> 00:03:35.415
+But I could also choose the value which has the best value of the smallest error.
+
+56
+00:03:35.415 --> 00:03:38.580
+I could choose something that had a value of
+
+57
+00:03:38.580 --> 00:03:42.150
+lambda that I liked and a reasonable error and so on.
+
+58
+00:03:42.150 --> 00:03:44.895
+So, I choose lambda.
+
+59
+00:03:44.895 --> 00:03:48.330
+Now, once I have chosen that lambda,
+
+60
+00:03:48.330 --> 00:03:55.925
+I'm going to go back and use the whole training set to fit the best model.
+
+61
+00:03:55.925 --> 00:03:57.550
+I can use the whole training set,
+
+62
+00:03:57.550 --> 00:04:01.795
+and now I have a slightly better estimate of the parameters.
+
+63
+00:04:01.795 --> 00:04:04.420
+I didn't get the best estimate from cross-validation
+
+64
+00:04:04.420 --> 00:04:07.750
+because each cross-validation round emitted some data.
+
+65
+00:04:07.750 --> 00:04:13.480
+And then, because I want to boast about how well my SVM works,
+
+66
+00:04:13.480 --> 00:04:16.490
+I can evaluate this model on the test set.
+
+67
+00:04:16.490 --> 00:04:19.335
+And that's the first time the test set has been touched.
+
+68
+00:04:19.335 --> 00:04:20.850
+So, I didn't break the rules.
+
+69
+00:04:20.850 --> 00:04:26.200
+I chose lambda fairly on data that hadn't been touched by training and I
+
+70
+00:04:26.200 --> 00:04:32.715
+reported performance fairly on data that hadn't been touched in training.
+
+71
+00:04:32.715 --> 00:04:37.320
+So, here are graphs from an example that appears in the text.
+
+72
+00:04:37.320 --> 00:04:38.460
+This is a typo.
+
+73
+00:04:38.460 --> 00:04:42.475
+It should say size of a not size of w. Over here,
+
+74
+00:04:42.475 --> 00:04:44.355
+I have rounds of training.
+
+75
+00:04:44.355 --> 00:04:46.765
+Here is the error reported by the model.
+
+76
+00:04:46.765 --> 00:04:48.780
+You know this is a fairly easy data set.
+
+77
+00:04:48.780 --> 00:04:51.885
+Basically, after a very small amount of training,
+
+78
+00:04:51.885 --> 00:04:55.065
+each one of these models is getting about 80 percent error,
+
+79
+00:04:55.065 --> 00:04:56.520
+a little bit less a little bit more.
+
+80
+00:04:56.520 --> 00:05:00.620
+These are plotted for different values of regularization constant.
+
+81
+00:05:00.620 --> 00:05:08.263
+So, the red plot is 1e minus 7, which is this.
+
+82
+00:05:08.263 --> 00:05:12.090
+And you can see that eventually it does fairly well.
+
+83
+00:05:12.090 --> 00:05:15.695
+The green plot is 1e minus 5.
+
+84
+00:05:15.695 --> 00:05:20.405
+It's all tangled up with the others in the horizontal line.
+
+85
+00:05:20.405 --> 00:05:26.490
+The purple plot is one which is kind of a regularized and it's making errors as a result.
+
+86
+00:05:26.490 --> 00:05:28.150
+You should notice a couple of things from this.
+
+87
+00:05:28.150 --> 00:05:29.447
+In a really easy example,
+
+88
+00:05:29.447 --> 00:05:31.566
+it all settles down fairly quickly.
+
+89
+00:05:31.566 --> 00:05:35.110
+Each step of training does not necessarily make things better.
+
+90
+00:05:35.110 --> 00:05:36.925
+Look, things got worse over there.
+
+91
+00:05:36.925 --> 00:05:40.560
+Why? Because I'm not actually going exactly downhill.
+
+92
+00:05:40.560 --> 00:05:42.420
+I'm going in a random direction.
+
+93
+00:05:42.420 --> 00:05:44.655
+The expected value of that direction is downhill,
+
+94
+00:05:44.655 --> 00:05:49.170
+but the direction I go in is random.
+
+95
+00:05:49.170 --> 00:05:52.855
+What happens is not sensitive to the size the regularization constant.
+
+96
+00:05:52.855 --> 00:05:56.985
+You'll notice that I've got my constants by a factor of 100 over here
+
+97
+00:05:56.985 --> 00:06:01.900
+and not much is changing.
+
+98
+00:06:01.900 --> 00:06:03.970
+You'll notice I've got my constants by
+
+99
+00:06:03.970 --> 00:06:07.320
+factors of 100 over here and still not much is changing.
+
+100
+00:06:07.320 --> 00:06:12.142
+Finally, if the regularization constant is big,
+
+101
+00:06:12.142 --> 00:06:15.910
+then on the whole the model likes very small a.
+
+102
+00:06:15.910 --> 00:06:18.520
+Why? Because it's expensive to have a big a.
+
+103
+00:06:18.520 --> 00:06:25.920
+If the regularization constant is small on the whole the model likes big a.
+
+104
+00:06:25.920 --> 00:06:31.530
+That isn't perfect and there's some suggestion over here that a middle
+
+105
+00:06:31.530 --> 00:06:37.700
+sized regularization constant gets me even bigger a's and that's not that surprising.
+
+106
+00:06:37.700 --> 00:06:42.030
+Okay, so now, what I'd like to be able to do is expand this procedure
+
+107
+00:06:42.030 --> 00:06:45.960
+to do multiclass classification. How would I do it?
+
+108
+00:06:45.960 --> 00:06:52.110
+Well, one thing I could do is if I had for example four class labels,
+
+109
+00:06:52.110 --> 00:06:55.538
+I could say, well that's really a bit vector.
+
+110
+00:06:55.538 --> 00:06:57.910
+0 0, 0 1,
+
+111
+00:06:57.910 --> 00:07:00.075
+1 0, 1 1.
+
+112
+00:07:00.075 --> 00:07:04.005
+Then I'm going to build one classifier to predict this bit,
+
+113
+00:07:04.005 --> 00:07:09.030
+one classifier to predict that bit and I should be able to go home happy.
+
+114
+00:07:09.030 --> 00:07:11.560
+The problem with that strategy is it doesn't work.
+
+115
+00:07:11.560 --> 00:07:13.130
+Reliably doesn't work.
+
+116
+00:07:13.130 --> 00:07:17.355
+And the reason that reliably doesn't work is once you've gotten this bit wrong,
+
+117
+00:07:17.355 --> 00:07:20.820
+nothing you can do over here is going to rescue you.
+
+118
+00:07:20.820 --> 00:07:24.175
+It turns out to be a reliably poor strategy.
+
+119
+00:07:24.175 --> 00:07:26.110
+Here is another strategy that is widely used.
+
+120
+00:07:26.110 --> 00:07:28.625
+It's known as One vs One.
+
+121
+00:07:28.625 --> 00:07:31.460
+So, for every pair of classes I train an SVM.
+
+122
+00:07:31.460 --> 00:07:38.030
+So for example again if I have four classes I might train a 1-2 SVM,
+
+123
+00:07:38.030 --> 00:07:41.450
+a 1-3 SVM a, 1-4,
+
+124
+00:07:41.450 --> 00:07:48.285
+a 2-3, a 2-4 and a 3-4.
+
+125
+00:07:48.285 --> 00:07:55.540
+Now, I take my example that I want to classify and I pass it into each of these SVMs.
+
+126
+00:07:55.540 --> 00:08:01.755
+I then ask, which class got the most votes?
+
+127
+00:08:01.755 --> 00:08:03.720
+And I accept the most popular class.
+
+128
+00:08:03.720 --> 00:08:06.120
+For example, if I have an example of class one,
+
+129
+00:08:06.120 --> 00:08:09.475
+with a little bit of luck, this one will class one.
+
+130
+00:08:09.475 --> 00:08:11.055
+This one will say class one,
+
+131
+00:08:11.055 --> 00:08:15.445
+maybe even that one will say class one and these will say either two, three or four.
+
+132
+00:08:15.445 --> 00:08:18.360
+And, I got three ones and I take that.
+
+133
+00:08:18.360 --> 00:08:20.490
+The scale's fairly badly and the reason the scale is
+
+134
+00:08:20.490 --> 00:08:22.530
+very badly is I have to build the number
+
+135
+00:08:22.530 --> 00:08:27.345
+of SVMs that is quadratic in the number of classes which is annoying.
+
+136
+00:08:27.345 --> 00:08:30.320
+The other thing I could do is One vs All.
+
+137
+00:08:30.320 --> 00:08:37.605
+So I could build an SVM that is 1 - (2 3 4),
+
+138
+00:08:37.605 --> 00:08:42.360
+2 - (1 3 4),
+
+139
+00:08:42.360 --> 00:08:53.158
+3 - (1 2 3) and finally,
+
+140
+00:08:53.158 --> 00:08:55.580
+1 - (1 2 3),
+
+141
+00:08:55.580 --> 00:08:57.660
+2 - (1 3 4),
+
+142
+00:08:57.660 --> 00:09:00.595
+3 - (1 2 4),
+
+143
+00:09:00.595 --> 00:09:06.992
+and finally 4 - (1 2 3).
+
+144
+00:09:06.992 --> 00:09:10.572
+Then I take my new example and I place it into each classifier.
+
+145
+00:09:10.572 --> 00:09:13.280
+Then I take the number that comes out
+
+146
+00:09:13.280 --> 00:09:16.100
+of the SVM and remember it's going to be positive on one side and
+
+147
+00:09:16.100 --> 00:09:22.480
+negative on the other and I choose the SVM that produces the biggest number for a class.
+
+148
+00:09:22.480 --> 00:09:27.820
+So, for example if I passed my example in and it gives me 0.2 for one
+
+149
+00:09:27.820 --> 00:09:30.975
+0.5 for two 0.1 for three
+
+150
+00:09:30.975 --> 00:09:34.970
+and 0.1 for four then I'll take the two because I got the biggest number.
+
+151
+00:09:34.970 --> 00:09:37.940
+This is not wholly
+
+152
+00:09:37.940 --> 00:09:41.210
+legitimate because the SVM doesn't know you're going to use the number like that,
+
+153
+00:09:41.210 --> 00:09:43.920
+but it turns out to work rather well.
+
+154
+00:09:43.920 --> 00:09:46.660
+Okay, so here's a summary.
+
+155
+00:09:46.660 --> 00:09:49.576
+A linear SVM is a go to classify.
+
+156
+00:09:49.576 --> 00:09:51.586
+When you have a binary classification problem,
+
+157
+00:09:51.586 --> 00:09:54.325
+the first thing you should do is try a linear SVM.
+
+158
+00:09:54.325 --> 00:09:56.880
+There is a lot of good software for building.
+
+159
+00:09:56.880 --> 00:10:01.085
+It is also straightforward to build multiclass classifiers out of binary classifiers.
+
+160
+00:10:01.085 --> 00:10:05.594
+Any decent SVM package will do this for you.
+
+161
+00:10:05.594 --> 00:10:08.000
+And that's it.

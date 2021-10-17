@@ -1,0 +1,141 @@
+This is our short movie on
+Naive Bayes Classifiers. I'm David Forsyth from the University
+of Illinois Urbana-Champaign. So now what we're going to do is build
+a classifier out of a probability model. And at some level this is
+a completely natural thing to do. So here is the way to do this, for the test example x I am going to report
+the class y that has the highest value of the posterior probability of the label
+condition on x, that's the p(y|x). If the largest value is achieved
+by more than one class, I could choose randomly
+from that set of classes. Now that in a very strong sense
+is an optimal classifier. The problem with it is
+I don't know p(y|x). Now when you are presented with
+a problem about posteriors it is pretty natural to invoke Bayes Rule and
+see what happens. And of course, I can apply Bayes rule and
+Bayes rule is going to tell me the p(y|x) is going to be p(x|y) p(y) over p(x). Now because I'm looking for the largest
+p(y|x), I could even ignore p(x). So I could write,
+p(y|x) is proportional to p(x|y) p(y). Problem, where does p(x|y) come from? So I had one distribution I didn't know
+and I've turned it into a product of two other distributions I don't know and
+I need to deal with that. p(y|x) is likely quite complicated as
+well, because x might be high dimension. So I might have a couple of thousand
+dimensions in my measurement of the object and building high dimensional
+probability distributions is no joke. Now there's another very important point
+here which is getting the posterior right may not matter all that much. So here is some fake data. And on the horizontal is
+the single feature x, so it's a one dimensional
+feature vector if you like. On the vertical is the probability, so Class 1 has this extremely
+weird probability distribution. Ignore these smooth gaussians. Class 2 has another extremely weird
+conditional probability distribution. So p(x|y) is horrid. But to classify this data accurately, all you really need to know
+is that p(x| Class 2) is big on that side and
+p(x|Class 1) is big on that side. You don't need to know
+the horrid details of p(x|y). So getting p(y|x) right probably
+doesn't matter all that much. What you need to know accurately
+is which one is bigger. You don't really need to know the value. Now, what I'm going to do is make
+the following extremely creative, totally inaccurate assumption. I am going to assume that
+p(x|y) is the product of each feature, the j, of p(xj|y). So each feature is conditionally
+independent given the label. Now, this assumption, it's very important to understand that
+this assumption is hardly every true. You really don't run into data like this
+all that often, but it's extremely useful. And the reason it's extremely useful,
+is I can turn it into a classifier easily. And those classifiers
+are extremely effective. The assumption is often
+referred to as Naive Bayes. It's naive because people who don't
+understand probability at all might be inclined to write this out and
+then you would laugh at it. The term naive is seriously unfair
+because it's actually a very creative, useful, and powerful assumption,
+but we're stuck with the name. Now let me look at what
+this assumption does. It says my posterior is
+the class conditional times the prior of the class
+over this prior of x, that's this product. And of course, I don't really care
+about the pi(x), so it's proportional. Why do I not care about the pi(x)? because it's the same for a particular x,
+doesn't change with the label, so it doesn't affect which one is largest. So now my p(y|x) is a product of individual class conditional densities. Which are one-dimensional
+condition on y and a prior on y. Now what I'm going to do is take
+my original classification rule, which was choose y such
+that p(y|x) is largest, and modify it very slightly by replacing
+that p(y|x), with a model. Which is the object obtained
+by assuming that all the y's are conditionally independent,
+and then ignoring the p(x). So what we did on the previous slide. And I'm going to choose the y,
+such that, that product is largest. Now this rule, in this form,
+is not very good. And the reason it isn't very good is
+each of these p's is a small number. If you multiple a whole bunch
+of small numbers together, you get a really tiny number. And you might very well find yourself
+in the position of comparing a bunch of numbers that are so tiny your computer can't tell
+the difference between them and 0. That's the problem. There is an easy solution. The logarithm is monotonic, so a greater than b means log a is greater
+than b, so I can change my rule. And my rule now becomes take the log, so choose y such that the sum of the logs of the class-conditional density for
+each feature. Remember these are now one-dimensional
+densities, so life is much easier. Plus the log of the prior, choose
+the class such that that is largest. Now I have to build models. So how do I actually get a model? Well, these are one dimensional densities,
+one for each feature dimension. There are all sorts of parametric
+models for one dimensional densities. I could use a normal distribution,
+I could use a Poisson distribution, I could use an exponential
+dependent distribution, I could even build a simple histogram and
+use that as a parametric. So and we'll look into a couple
+of those in a few slides. This, the prior,
+is also relatively easy to model. What I could do is simply count
+the number of examples of each class, divide by the total number of examples,
+and then I've got a prior for each label. Under some circumstances,
+if I'm fairly confident that the labels occur evenly,
+I might even just ignore the whole thing. Why?
+Because I'm fairly confident that the labels occur evenly,
+log p(y) must be the same for each y. The fact that it isn't exactly the same
+for each y is some weird feature to do with my training data, so I might
+just leave out the log of the prior. So let's think about the models of
+the class conditional densities. Simple parametric models work
+really well for p(xj|y). So I could use a normal distribution for
+each in turn, for each possible y using training data. How do I get the parameters? Maximum likelihood. So I just compute the mean and
+the standard deviation using maximum likelihood or the mu and sigma using
+maximum likelihood and I'm done. If you have measurements, for example, that are counts,
+you're probably going to feel an urge to bring on a Poisson distribution
+which should be a natural thing to do. If you had a (0, 1) variable,
+you might use a Bernoulli distribution. Basically the probability of 1 and
+the probability of 0. How do you get those probabilities? Count. If it was a discreet variable,
+you might try a multinomial model. Now, a thing to understand and
+I'll make a fuss about in a second, is these class conditional models
+do not necessarily need to be accurate models of the density for
+the classifier to work well. So for example, one thing that works
+rather nicely in some problems, is I could take, a continuous feature, I could
+quantized it to a fixed set of values and then I could fit amount multinomial model. That turns out to be quite
+effective under some circumstances. The models don't have to be good. So I've shown this before,
+here is Class 1's, class conditional density,
+for a one dimensional thing. You see, I can't even follow
+a straight line with an Apple pencil, but that's old edge and dry rot, I hope. Here's the class conditional density for
+another feature. There are horrid structures over here. Imagine I take the green
+class conditional density and I simply replace it With
+a rather shaky normal model. I take the red class
+conditional density and I replace that with a rather
+shaky normal model. You should notice that as a model
+of the class conditional density, these normal models
+are really pretty shaky. They're not good. They don't capture the main features, which is lots of different bumps,
+multi-modal, etc., etc. But from the point of view of what
+information we really want to extract from the data, which is when you're
+on that side it's red and when you're on that side
+it's green of this point. Those normal distributions do just fine. It's an important point. Your class conditional models might be
+quite bad as probability models and still yield rather a good
+naive Bayes classifier. This infuriates and
+frustrates people doing exercises. It has two consequences. One is the models that you think should
+work, might not work all that well. The other is models that you think
+are awful, might work extremely well. In practice, high dimensional data
+seems to exaggerate this effect. You should remember that
+naive Bayes is really good at dealing with high dimensional data. And, in particular, when you deal
+with high dimensional data your class conditional models don't have to be
+all that good for things to get away. What you really need to be good
+at is knowing when Class 2 is more likely than Class 1, not the details
+of what Class 2 does with its axis. Okay, so let's do a worked example. I got a breast tissue dataset from the UC
+Irvine Machine Learning Data Repository. It contains measurements of a variety of
+properties of six different classes of breast tissue. So you want to build an evaluate a naive
+Bayes classifier to distinguish between the classes automatically from
+the measurements So I used R for this example because I could use packages. You will notice in this course I spend
+relatively little time telling you how to build software because I may not
+know under some circumstances and I certainly don't care. What I'm trying to do is show you
+how to obtain tools and use them. So the main difficulty here is
+finding the right packages, understanding the documentation and
+checking that they're right. It's easy enough to write the source for
+this, this really isn't very difficult to do, but why would you do something
+that somebody else had already done. I used a package called Caret, which is quite good at things like
+trying to split some cross-validation. And I used a naive Bayes classifier
+which is in a package called klaR. So I separated out the test set which
+was approximately 20% of the cases for each class and then I trained with
+cross validation on the remainder. I used a normal model for each feature. And I got a class confusion matrix on
+the test set that looked like this. So here are different kinds of tissue adi,
+car, con, fad, gla, mas. True labels of it are here. Predicted labels are there. And you can see the diagonal here
+are where most of the big values are. So we're doing okay. The accuracy is 52%. In the training data, the classes are
+nearly balanced, in those six classes, so the chance is about 17%,
+so I'm doing okay here. To get really accurate numbers I
+should average over test train splits, and I haven't done that.

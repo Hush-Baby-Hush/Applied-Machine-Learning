@@ -1,0 +1,99 @@
+This is David Forsyth from
+the University of Illinois and I'm going to talk about the hinge loss. So now, here's my big problem. I need to find the a and
+b that makes my classifier work well. So I want some terminology. I will just use the term decision
+boundary to refer to when a transpose the points, where
+a transpose x plus b is equal to zero. That is always a hyper plane. So in 1D, it's a point. In 2D, it's a line. In 3D, it's a plane. In 4D, it's a 3D hyper plane and so on. What we're going to do is,
+on what we have is on one side, examples are negative,
+on the other side they're positive. What we need to do is to choose A and
+B that minimizes some cost where the cost gets the training examples, mostly on
+the right side of the decision boundary. And this is the tricky bit,
+and ensures the test examples, which I don't see in training so they
+will worry, are on the right side too. That's the tricky one. We are going to use a cost function
+that will take the following form. There is some cost to
+do with training error. And there's a second cost,
+which is a penalty term, which will be used to ensure the test
+examples are on the right side as well. So I'm going to talk about the training
+error cost first, because it's easier. So let me think about
+the training error cost. For any training vector Xi,
+I'm going to associate with that vector Xi gamma,
+which will be a transpose Xi + b. And the reason I'm writing out that gamma
+is simply because I don't want to write a transpose Xi + b everywhere. It just makes the equation shorter,
+there's noting significant about it. So my cost is going to have the form
+compare gamma, To the right answer. The right answer is either one or
+minus one, depending on the label. Remember my labels were either one or
+minus one. Now, I would like my training
+cost to have the form of an average of cost at examples. So one of the N makes an average,
+why do I care about that? Because I don't really want the number
+to change if I have more examples or fewer examples. And I'm going to sum at each example. Something tells me how well
+I'm doing on that example. Remember, this gamma depends on a and b. They're just hidden in the gamma. Now, let's talk about what we want
+from that training error cost. Good properties from that cost function. So the first property I
+want is if gamma i and yi have different signs,
+then that means my a and b predict the wrong sign at this example,
+it's making an error. So there's should be some large cost. I don't want to make errors,
+I want it to be expensive to make errors. Furthermore, if gamma i and yi have
+different signs and gamma is really big, has large magnitude, then the classifier's
+probably going to make wrong predictions for test examples that
+are close to Xi as well, why? Because gamma has large magnitude,
+meaning Xi is far away from the boundary. So C should be really big in that case. So I want C to get bigger as
+the magnitude of gamma i gets larger when yi and gamma i have different signs. Now, if yi and
+gamma i have the same signs, but gamma i has small magnitude,
+then what that means is xi is quite close to an x
+where a transpose x + b = 0. Now, if it moves just
+a little bit further, it'll get on the other side of
+the boundary, and I don't want that. So if gamma i is small, then the classify
+might classify Xi correctly but it might not classify
+points nearby correctly. So I want C to not be zero, in this case. I want it to be small, but not zero. Finally, if they both have the same sign,
+and gamma i has large magnitude,
+then C can be zero. So these are three very
+desirable features of a cost. Now, what I'm going to do is pull the cost
+that everybody uses because it's very good, and it works better than anything
+else as far as we know, out of my ear and then explain that it has
+these good properties. So here's the cost. It's known as the Hinge Loss. I say the cost of gamma and y is the maximum of 0 or 1- y gamma. And it has these properties,
+so let's visualize that cost. If yi and gamma i have different signs,
+then this term is negative, which means this term is positive,
+which means it's expensive. And if gamma is big, then C is big,
+so we have the first property. If yi and gamma i have the same sign,
+but yi gamma i is less than 1, meaning gamma i is kind of small,
+then there is some cost. Why is there some cost? Because now,
+this term over this term is positive, it's not positive enough to knock
+out that 1, and I get some number. But if yi times gamma i is bigger than 1,
+the classifier breaks the sign correctly and x as far
+from the boundary, there is no cost. So we can visualize this. So we can visualize this, I'm going to
+make a little drawing over here. Imagine, yi = 1. On the horizontal,
+I'm going to put gamma i and then I'm going to plot the cost
+as the function of gamma i. If gamma i is equal to 1,
+then the cost is 0. If gamma i is bigger than 1,
+the cost is 0. But if gamma i is smaller than 1,
+the cost gross linearly. And in fact, we know with what slope
+because if gamma i is equal to 0, then the cost is equal to 1. So the cost looks like that. If gamma i is really positive, it's free. If gamma i is slightly positive, we'd pay. And if gamma i is really negative,
+we pay a lot, which is what we want. Now, there is a problem here. So, one way to see this problem, is if the training examples all have 0
+hinge loss, the classifier is not unique. How could that happen? Well, let me draw a little
+data set up here. Imagine all my pluses are up there. Some of them are Xs apparently, but
+we'll make the rest of them pluses. And all my minuses are down here. Then there's a line that separates them
+that's very far away from both sides, so each of these could
+have a hinge loss of 0. Now, notice if that's the case,
+the classifier is not unique. 2 times a and 2 times b is just as
+good a times b, which is a nuisance. But now, let me think about the hinge loss
+for some unknown future test example. Now, it's important that it is unknown. If the text example has feature
+vector X and unknown label y, the hinge loss is going to be max of 0,
+1- y times a transpose x + b. Imagine, we get this example wrong, Right? If a has a small magnitude, then the hinge
+loss will be small for that example. Now, what is that telling me? What it's telling me is, on balance,
+if it's difficult to choose a classifier, choose the one that has the smallest a,
+because anything you see in the future is going to have a smaller
+hinge loss if you can make the a smaller. Idea, try to get low hinge
+loss on training examples using a small magnitude a, or
+penalize large magnitudes of a. This is known as regularization. So now, we go back to my original form of the cost
+function that I was going to minimize. I'm going to minimize
+the training error cost, which is the average of the hinge losses
+plus some weight times a penalty term. And that penalty term will
+be the magnitude of a. This lambda is sometimes referred
+to as the regularization parameter. By the way,
+the two over here is just for neatness. And when you differentiate,
+you don't have twos knocking around. This Lamda is known as
+the regularization parameter. It balances training error
+against future error. So if lamda is 0, then we're not that
+concerned about future error and we're minimizing training error. If lambda is really big, we don't care
+all that much about this cost, and we try to make a as small as possible. And, in fact, if lambda is big enough,
+a is going to be 0, and it's not going to be a particularly
+interesting classifier. The problem we have is we don't
+know the best choice of lambda.

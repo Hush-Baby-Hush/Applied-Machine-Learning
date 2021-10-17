@@ -1,0 +1,149 @@
+Hi, this is the first movie
+in the classification series. I'm David Forsyth from the University
+of Illinois at Urbana-Champaign. So what is classification? As I go through these movies, you'll get used to this habit of mine of
+sticking up little pieces of the notes. Why?
+I wrote the notes because they allow me to emphasize things that I
+want you to remember. And you should think of these movies as
+ways of helping you go through the notes. So what is a classifier? It's a thing that accepts a set of
+features, and it produces a label. They're trained on labeled examples. But what I want is not to do well
+at labeled examples that I know, because I already know the answer. What I want to do is
+to do well at runtime. Of course, to be able to train it, the
+data that I see at training time should look, in some sense that I'm
+going to be vague and weasely about, rather like future data. So what does this definition do for us? It really is anything that accepts
+a description of an object. I will think of that as a feature vector. And it's not even necessarily a vector,
+inasmuch as I might not be able to add and subtract them. It's a tuple of features,
+and it'll make a label. This idea is hugely general and useful. You run into classifiers all the time. So for example, the credit card company
+has some kind of classification procedure that sits in the back
+of some office somewhere. And every time you try and pay for
+something with a credit card, it tries to figure out whether it's you
+and you should be allowed to do it, or it is some naughty person
+who should be stopped. Many people watching these videos will
+have had the following experience. If you go and
+buy gasoline with your credit card and then immediately afterwards go and
+buy something expensive and frivolous, then you get a phone number. You might get the second transaction
+declined, if you're really lucky. But you might also get a phone call
+from your credit card people saying, what's going on? Why? Because if you steal a credit card, the best way to check that it
+still works is to buy gas with it. And once you've done that,
+you should go out and buy something frivolous that you can sell. Credit card companies know this, and part of the classification procedure is
+to watch out for that sort of behavior. I'm sure there are other things as well. Here's another example. Should this program be allowed to run? These days, when you download a program,
+usually you operate as a classifier. You download the program,
+you try and run it. If your operating system is reasonably
+modern, it then says to you, I don't trust this program
+because you downloaded it, and it's probably
+going to wreck your disk. And you then press a button saying,
+I don't care, it's my fault. You're operating as a classifier,
+should it run, should it not run. There are buildings in the South Bay
+in the Bay Area full of people who write classifiers or
+improve classifiers to determine whether a picture is naughty or
+not. You can use your own
+definition of naughty, but it usually involves the idea
+that it might shock someone. Why? Because people place advertising
+on web pages automatically. And there are advertisers who do not want
+their products placed next to pictures that might shock someone. So it's very valuable and
+very useful to be able to say, this picture might distress or
+offend or shock somebody. And you want to be able
+to do that automatically. Here's another. I'm an automated vehicle, I'm driving
+around, a bad situation develops. And I should either keep going forward or
+take a quick turn to try and avoid something, which might be dangerous. The road might be wet or slippery. Question, the thing in front of me, is it
+something I can run over, like a squirrel? I might regret it, but it's not
+going to lead to any serious trouble. Or is it something I cannot run over,
+like a child? Is this person sick? You can abstract doctors as classifiers. They take a bunch of features,
+and then they produce a label. What disease does this person have? Now they produce more kinds of labels. Okay, so the idea is extremely useful and
+extremely general. What do we do with it? Well, before we can talk sense about
+how to build particular classifiers, what we're going to need is a vocabulary. So the first thing to think about is
+what kind of labels are we going to use. A very important and very common kind
+of classifier is known as a binary classifier, and it has two labels,
+binary for two. The labels could be 1 or -1, or 1 or 0, you can turn one into the other very
+easily, or true or false, or whatever. There are some methods that just sort of
+naturally produce binary classifiers. Other methods produce other
+kinds of classifiers. But the binary classifier is
+a really important example. A multi-class classifier produces
+multiple different labels. The labels could be ordinal in the sense
+of one, two, three, four, five. Or they could be incomparable, so
+if you say something's a cat or a dog, you can't really say
+that cats are less than dogs. Or there's no really meaningful
+comparison between the numbers. It turns out, people very often forget
+there is an option that classifiers have, which is refusing to classify. And that essentially is saying,
+I don't know, and I don't want this example to count. In some circumstances,
+that is practical and it's useful, and it can affect performance. So a classifier that knows when it's very
+likely to make a mistake may be better off saying, I don't know what this is, and
+I've got no way of resolving the question. Sometimes you can't allow that. So if you're thinking about
+credit card transactions, it's not really helpful to say,
+this one's good, this one's fraudulent. And I've got no idea about this one,
+and I'm not going to deal with it. You really do need to produce a decision. Okay, now we need to think about errors. Imagine I have a binary classifier. There are special names for
+the errors that a binary classifier makes. So if I have something that
+should be labeled false, here, now I can use my neat little pen. So it should be labeled false,
+and gee, I can change colors too. But I actually labeled it true. That's very often called a false positive. I said it was true, but I'm wrong,
+so it's a false positive. And it's sometimes called a type I error. Similarly, if the right answer was true,
+and I said false,
+I'm going to call that a false negative. That's sometimes called a type II error. Now, this gives us two natural
+measures of performance. One is accuracy. So the accuracy of a binary classifier, or
+the accuracy in fact of any classifier, is the fraction of examples that
+have been correctly classified. So I'm presented with
+a whole bunch of examples. Some fraction is classified correctly,
+and that's the accuracy. Similarly, the error
+rate is the fraction of examples that are incorrectly classified. And you sort of expect that
+accuracy equals 1 minus error rate, just as a matter of logic. Now, this may be news to some people,
+but it's an important concept. Classifiers are pretty much
+guaranteed to make mistakes. The question is,
+can you keep the mistakes down? So here's a little example. An alien arrives on the planet. They would like to be able to predict the
+gender of the people they're dealing with, which can simplify some social occasions. And the only measurement that they
+possess is the height of the person. Now, that alien is in trouble. So what I've done is I've plotted over here a histogram of
+heights against gender. The blue one I believe is male. The green one I believe is female. And the height is in inches. Why am I using outdated units? Well, that's how I got the data, and
+I didn't feel like transforming. So you'll notice that the alien is
+going to have to have some rule for each height value. And a simple rule would be to say, look,
+if the height is bigger than some number, say male, otherwise, say female. But that alien is going to make mistakes. So imagine the alien says,
+choose a height that is bigger, that is 60,
+this looks like about 68 inches. And so everybody on that side is male,
+and everybody on that side is female. These double hatched bars over
+here are mistakes, right? So there are males that
+are shorter than 68 inches. There are females that
+are taller than 68 inches. And the alien is going
+to misclassify them. It can't make its life easier by saying,
+well, I will have a more complicated rule. So if I say, for example,
+everything bigger than 68 inches but
+smaller than 70 inches is male. There are a whole bunch of females over
+here that the alien is going to get wrong. Whatever the alien does,
+it's got a problem. Now, there is a concept
+here worth mentioning. It's kind of abstract, because we usually
+can't actually know what its value is, but it's worth knowing. Imagine I have a particular
+set of features. And imagine for some reason,
+I know the best possible rule. The error that I encounter when I
+use the best possible rule with that set of features is called the Bayes error. So in this case, the Bayes error is
+going to be, if I choose the best possible rule, it's probably choose a high
+threshold somewhere round about there. Everybody that side is male,
+everybody that side is female. And you can see I've got a sort
+of pictorial representation of the Bayes error. Because it's going to be the fraction
+of females on this side, so the area under these bars, and
+the fraction of males on that side, the area under those bars,
+this one gets split. Usually we can't know this. Now, the reason we usually can't know this
+is we usually don't know what the best possible rule is with
+a given set of features. But the important thing is,
+it's usually not zero. Now, we now have a problem. We usually can't know the best possible
+accuracy for a classifier on a problem. So we don't really know whether
+the one we have is good or not. I will measure its accuracy, and
+I'll say, well, is that good? And the answer is, I don't know. There are several ways to
+get out of this problem. One is to say, it's good enough for
+my purpose, so I'm not going to worry about the question. And that is, in fact,
+a very sensible answer. There are many times where something
+that has 90% accuracy is wonderful. And going from 90 to 92% doesn't matter
+to anyone, you just get on with it and use it. But there is another strategy, which is you could compare to
+some other natural method. That natural method is called a baseline. And that baseline you sort of have
+to choose with sensible judgment. So it might be another classifier or
+another kind of classifier. It might be chance. So chance says, I'm just going to assign
+examples to class uniformly and at random. So for example, chance would get
+me 50% accuracy for a balanced, two-class problem. If I have as many ones as I have minus
+ones, and I assign them at random, I'm going to get half of them right. Notice, by the way, that a binary classifier is
+at least 50% accurate, right? Why? Because if it's less than 50% accurate,
+I could always flip the bit and do better. Another version or
+another plausible baseline is you assign every example to the most common class. This can be very hard to beat. So imagine you have 99% honest credit card transactions and 1% fraudulent transactions. You can then say,
+every transaction is honest, and any classifier that has to beat
+that has to be really, really good. So assigning to the most common class can
+be hard to beat, and it's a good baseline. In summary, a classifier accepts a feature
+representation and makes a label. Classifiers are important and
+widely useful. Classifiers are usually learned from data. And every problem has some
+inevitable minimum error, which is usually known as the Bayes error. The problem with this is the Bayes
+error is hardly ever known. Finally, it's usual to compare
+error to something else, because you don't know the Bayes error. So you might compare error to,
+for example, a baseline. And I gave a variety of
+different baselines.

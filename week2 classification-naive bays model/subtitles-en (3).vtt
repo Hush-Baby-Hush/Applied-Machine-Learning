@@ -1,0 +1,921 @@
+WEBVTT
+
+1
+00:00:00.280 --> 00:00:03.300
+This is our short movie on
+Naive Bayes Classifiers.
+
+2
+00:00:03.300 --> 00:00:06.265
+I'm David Forsyth from the University
+of Illinois Urbana-Champaign.
+
+3
+00:00:08.270 --> 00:00:12.660
+So now what we're going to do is build
+a classifier out of a probability model.
+
+4
+00:00:12.660 --> 00:00:16.780
+And at some level this is
+a completely natural thing to do.
+
+5
+00:00:16.780 --> 00:00:19.350
+So here is the way to do this, for
+
+6
+00:00:19.350 --> 00:00:24.820
+the test example x I am going to report
+the class y that has the highest value of
+
+7
+00:00:24.820 --> 00:00:29.980
+the posterior probability of the label
+condition on x, that's the p(y|x).
+
+8
+00:00:31.060 --> 00:00:33.940
+If the largest value is achieved
+by more than one class,
+
+9
+00:00:33.940 --> 00:00:36.860
+I could choose randomly
+from that set of classes.
+
+10
+00:00:36.860 --> 00:00:40.970
+Now that in a very strong sense
+is an optimal classifier.
+
+11
+00:00:42.730 --> 00:00:49.144
+The problem with it is
+I don't know p(y|x).
+
+12
+00:00:49.144 --> 00:00:53.170
+Now when you are presented with
+a problem about posteriors it is
+
+13
+00:00:53.170 --> 00:00:56.290
+pretty natural to invoke Bayes Rule and
+see what happens.
+
+14
+00:00:56.290 --> 00:01:03.220
+And of course, I can apply Bayes rule and
+Bayes rule is going to tell me the p(y|x)
+
+15
+00:01:03.220 --> 00:01:09.840
+is going to be p(x|y) p(y) over p(x).
+
+16
+00:01:09.840 --> 00:01:15.345
+Now because I'm looking for the largest
+p(y|x), I could even ignore p(x).
+
+17
+00:01:16.380 --> 00:01:23.516
+So I could write,
+p(y|x) is proportional to p(x|y) p(y).
+
+18
+00:01:23.516 --> 00:01:29.310
+Problem, where does p(x|y) come from?
+
+19
+00:01:29.310 --> 00:01:33.140
+So I had one distribution I didn't know
+and I've turned it into a product of two
+
+20
+00:01:33.140 --> 00:01:35.949
+other distributions I don't know and
+I need to deal with that.
+
+21
+00:01:38.135 --> 00:01:43.940
+p(y|x) is likely quite complicated as
+well, because x might be high dimension.
+
+22
+00:01:43.940 --> 00:01:49.250
+So I might have a couple of thousand
+dimensions in my measurement of the object
+
+23
+00:01:49.250 --> 00:01:54.630
+and building high dimensional
+probability distributions is no joke.
+
+24
+00:01:54.630 --> 00:02:00.090
+Now there's another very important point
+here which is getting the posterior right
+
+25
+00:02:00.090 --> 00:02:01.680
+may not matter all that much.
+
+26
+00:02:03.140 --> 00:02:05.190
+So here is some fake data.
+
+27
+00:02:05.190 --> 00:02:11.390
+And on the horizontal is
+the single feature x,
+
+28
+00:02:11.390 --> 00:02:13.260
+so it's a one dimensional
+feature vector if you like.
+
+29
+00:02:14.600 --> 00:02:18.219
+On the vertical is the probability, so
+
+30
+00:02:18.219 --> 00:02:24.250
+Class 1 has this extremely
+weird probability distribution.
+
+31
+00:02:24.250 --> 00:02:26.400
+Ignore these smooth gaussians.
+
+32
+00:02:26.400 --> 00:02:32.980
+Class 2 has another extremely weird
+conditional probability distribution.
+
+33
+00:02:32.980 --> 00:02:39.920
+So p(x|y) is horrid.
+
+34
+00:02:39.920 --> 00:02:43.527
+But to classify this data accurately,
+
+35
+00:02:43.527 --> 00:02:48.772
+all you really need to know
+is that p(x| Class 2) is big
+
+36
+00:02:48.772 --> 00:02:53.840
+on that side and
+p(x|Class 1) is big on that side.
+
+37
+00:02:53.840 --> 00:02:58.410
+You don't need to know
+the horrid details of p(x|y).
+
+38
+00:02:58.410 --> 00:03:05.370
+So getting p(y|x) right probably
+doesn't matter all that much.
+
+39
+00:03:05.370 --> 00:03:09.440
+What you need to know accurately
+is which one is bigger.
+
+40
+00:03:09.440 --> 00:03:10.627
+You don't really need to know the value.
+
+41
+00:03:13.300 --> 00:03:17.471
+Now, what I'm going to do is make
+the following extremely creative,
+
+42
+00:03:17.471 --> 00:03:20.360
+totally inaccurate assumption.
+
+43
+00:03:20.360 --> 00:03:26.704
+I am going to assume that
+p(x|y) is the product
+
+44
+00:03:26.704 --> 00:03:32.130
+of each feature, the j, of p(xj|y).
+
+45
+00:03:33.410 --> 00:03:38.027
+So each feature is conditionally
+independent given the label.
+
+46
+00:03:38.027 --> 00:03:39.072
+Now, this assumption,
+
+47
+00:03:39.072 --> 00:03:42.760
+it's very important to understand that
+this assumption is hardly every true.
+
+48
+00:03:42.760 --> 00:03:47.500
+You really don't run into data like this
+all that often, but it's extremely useful.
+
+49
+00:03:47.500 --> 00:03:51.700
+And the reason it's extremely useful,
+is I can turn it into a classifier easily.
+
+50
+00:03:51.700 --> 00:03:56.350
+And those classifiers
+are extremely effective.
+
+51
+00:03:56.350 --> 00:03:59.002
+The assumption is often
+referred to as Naive Bayes.
+
+52
+00:04:02.166 --> 00:04:07.146
+It's naive because people who don't
+understand probability at all might be
+
+53
+00:04:07.146 --> 00:04:11.510
+inclined to write this out and
+then you would laugh at it.
+
+54
+00:04:11.510 --> 00:04:16.659
+The term naive is seriously unfair
+because it's actually a very creative,
+
+55
+00:04:16.659 --> 00:04:21.333
+useful, and powerful assumption,
+but we're stuck with the name.
+
+56
+00:04:21.333 --> 00:04:23.495
+Now let me look at what
+this assumption does.
+
+57
+00:04:23.495 --> 00:04:28.786
+It says my posterior is
+the class conditional
+
+58
+00:04:28.786 --> 00:04:34.493
+times the prior of the class
+over this prior of x,
+
+59
+00:04:34.493 --> 00:04:37.291
+that's this product.
+
+60
+00:04:37.291 --> 00:04:41.210
+And of course, I don't really care
+about the pi(x), so it's proportional.
+
+61
+00:04:41.210 --> 00:04:42.960
+Why do I not care about the pi(x)?
+
+62
+00:04:42.960 --> 00:04:46.650
+because it's the same for a particular x,
+doesn't change with the label,
+
+63
+00:04:46.650 --> 00:04:48.810
+so it doesn't affect which one is largest.
+
+64
+00:04:50.290 --> 00:04:55.790
+So now my p(y|x) is a product
+
+65
+00:04:55.790 --> 00:04:59.240
+of individual class conditional densities.
+
+66
+00:04:59.240 --> 00:05:03.795
+Which are one-dimensional
+condition on y and a prior on y.
+
+67
+00:05:05.538 --> 00:05:11.952
+Now what I'm going to do is take
+my original classification rule,
+
+68
+00:05:11.952 --> 00:05:17.415
+which was choose y such
+that p(y|x) is largest, and
+
+69
+00:05:17.415 --> 00:05:24.336
+modify it very slightly by replacing
+that p(y|x), with a model.
+
+70
+00:05:24.336 --> 00:05:28.328
+Which is the object obtained
+by assuming that all the y's
+
+71
+00:05:28.328 --> 00:05:32.940
+are conditionally independent,
+and then ignoring the p(x).
+
+72
+00:05:32.940 --> 00:05:35.100
+So what we did on the previous slide.
+
+73
+00:05:35.100 --> 00:05:39.300
+And I'm going to choose the y,
+such that, that product is largest.
+
+74
+00:05:39.300 --> 00:05:41.890
+Now this rule, in this form,
+is not very good.
+
+75
+00:05:41.890 --> 00:05:47.770
+And the reason it isn't very good is
+each of these p's is a small number.
+
+76
+00:05:47.770 --> 00:05:50.260
+If you multiple a whole bunch
+of small numbers together,
+
+77
+00:05:50.260 --> 00:05:52.110
+you get a really tiny number.
+
+78
+00:05:52.110 --> 00:05:55.810
+And you might very well find yourself
+in the position of comparing
+
+79
+00:05:55.810 --> 00:05:57.240
+a bunch of numbers that are so
+
+80
+00:05:57.240 --> 00:06:00.240
+tiny your computer can't tell
+the difference between them and 0.
+
+81
+00:06:00.240 --> 00:06:00.780
+That's the problem.
+
+82
+00:06:02.230 --> 00:06:03.641
+There is an easy solution.
+
+83
+00:06:03.641 --> 00:06:05.732
+The logarithm is monotonic, so
+
+84
+00:06:05.732 --> 00:06:10.231
+a greater than b means log a is greater
+than b, so I can change my rule.
+
+85
+00:06:10.231 --> 00:06:14.470
+And my rule now becomes take the log, so
+
+86
+00:06:14.470 --> 00:06:18.580
+choose y such that the sum of the logs of
+
+87
+00:06:18.580 --> 00:06:24.650
+the class-conditional density for
+each feature.
+
+88
+00:06:24.650 --> 00:06:28.110
+Remember these are now one-dimensional
+densities, so life is much easier.
+
+89
+00:06:28.110 --> 00:06:33.150
+Plus the log of the prior, choose
+the class such that that is largest.
+
+90
+00:06:34.930 --> 00:06:35.980
+Now I have to build models.
+
+91
+00:06:35.980 --> 00:06:38.190
+So how do I actually get a model?
+
+92
+00:06:38.190 --> 00:06:43.490
+Well, these are one dimensional densities,
+one for each feature dimension.
+
+93
+00:06:45.060 --> 00:06:47.770
+There are all sorts of parametric
+models for one dimensional densities.
+
+94
+00:06:47.770 --> 00:06:51.390
+I could use a normal distribution,
+I could use a Poisson distribution,
+
+95
+00:06:51.390 --> 00:06:54.220
+I could use an exponential
+dependent distribution,
+
+96
+00:06:54.220 --> 00:06:58.550
+I could even build a simple histogram and
+use that as a parametric.
+
+97
+00:07:00.320 --> 00:07:02.930
+So and we'll look into a couple
+of those in a few slides.
+
+98
+00:07:03.940 --> 00:07:08.150
+This, the prior,
+is also relatively easy to model.
+
+99
+00:07:08.150 --> 00:07:11.670
+What I could do is simply count
+the number of examples of each class,
+
+100
+00:07:11.670 --> 00:07:15.370
+divide by the total number of examples,
+and then I've got a prior for each label.
+
+101
+00:07:15.370 --> 00:07:19.780
+Under some circumstances,
+if I'm fairly confident
+
+102
+00:07:19.780 --> 00:07:24.876
+that the labels occur evenly,
+I might even just ignore the whole thing.
+
+103
+00:07:24.876 --> 00:07:26.740
+Why?
+Because I'm fairly
+
+104
+00:07:26.740 --> 00:07:31.090
+confident that the labels occur evenly,
+log p(y) must be the same for each y.
+
+105
+00:07:32.640 --> 00:07:36.210
+The fact that it isn't exactly the same
+for each y is some weird feature to
+
+106
+00:07:36.210 --> 00:07:40.910
+do with my training data, so I might
+just leave out the log of the prior.
+
+107
+00:07:40.910 --> 00:07:43.620
+So let's think about the models of
+the class conditional densities.
+
+108
+00:07:43.620 --> 00:07:49.110
+Simple parametric models work
+really well for p(xj|y).
+
+109
+00:07:49.110 --> 00:07:51.930
+So I could use a normal distribution for
+each in turn, for
+
+110
+00:07:51.930 --> 00:07:54.910
+each possible y using training data.
+
+111
+00:07:54.910 --> 00:07:56.290
+How do I get the parameters?
+
+112
+00:07:56.290 --> 00:07:57.330
+Maximum likelihood.
+
+113
+00:07:57.330 --> 00:08:01.290
+So I just compute the mean and
+the standard deviation using maximum
+
+114
+00:08:01.290 --> 00:08:06.310
+likelihood or the mu and sigma using
+maximum likelihood and I'm done.
+
+115
+00:08:06.310 --> 00:08:08.199
+If you have measurements, for example,
+
+116
+00:08:08.199 --> 00:08:11.070
+that are counts,
+you're probably going to feel an urge
+
+117
+00:08:11.070 --> 00:08:14.510
+to bring on a Poisson distribution
+which should be a natural thing to do.
+
+118
+00:08:14.510 --> 00:08:18.450
+If you had a (0, 1) variable,
+you might use a Bernoulli distribution.
+
+119
+00:08:18.450 --> 00:08:20.660
+Basically the probability of 1 and
+the probability of 0.
+
+120
+00:08:20.660 --> 00:08:21.850
+How do you get those probabilities?
+
+121
+00:08:21.850 --> 00:08:23.300
+Count.
+
+122
+00:08:23.300 --> 00:08:26.710
+If it was a discreet variable,
+you might try a multinomial model.
+
+123
+00:08:26.710 --> 00:08:31.660
+Now, a thing to understand and
+I'll make a fuss about in a second,
+
+124
+00:08:31.660 --> 00:08:36.600
+is these class conditional models
+do not necessarily need to
+
+125
+00:08:36.600 --> 00:08:41.100
+be accurate models of the density for
+the classifier to work well.
+
+126
+00:08:41.100 --> 00:08:46.020
+So for example, one thing that works
+rather nicely in some problems, is I could
+
+127
+00:08:46.020 --> 00:08:51.110
+take, a continuous feature, I could
+quantized it to a fixed set of values and
+
+128
+00:08:51.110 --> 00:08:53.340
+then I could fit amount multinomial model.
+
+129
+00:08:53.340 --> 00:08:55.350
+That turns out to be quite
+effective under some circumstances.
+
+130
+00:08:57.460 --> 00:08:59.010
+The models don't have to be good.
+
+131
+00:08:59.010 --> 00:09:04.120
+So I've shown this before,
+here is Class 1's,
+
+132
+00:09:04.120 --> 00:09:06.370
+class conditional density,
+for a one dimensional thing.
+
+133
+00:09:06.370 --> 00:09:09.190
+You see, I can't even follow
+a straight line with an Apple pencil,
+
+134
+00:09:09.190 --> 00:09:13.300
+but that's old edge and dry rot, I hope.
+
+135
+00:09:14.480 --> 00:09:18.170
+Here's the class conditional density for
+another feature.
+
+136
+00:09:18.170 --> 00:09:19.930
+There are horrid structures over here.
+
+137
+00:09:21.480 --> 00:09:24.574
+Imagine I take the green
+class conditional density and
+
+138
+00:09:24.574 --> 00:09:31.040
+I simply replace it With
+a rather shaky normal model.
+
+139
+00:09:31.040 --> 00:09:34.180
+I take the red class
+conditional density and
+
+140
+00:09:34.180 --> 00:09:38.530
+I replace that with a rather
+shaky normal model.
+
+141
+00:09:39.950 --> 00:09:44.140
+You should notice that as a model
+of the class conditional density,
+
+142
+00:09:44.140 --> 00:09:46.390
+these normal models
+are really pretty shaky.
+
+143
+00:09:46.390 --> 00:09:47.410
+They're not good.
+
+144
+00:09:47.410 --> 00:09:48.840
+They don't capture the main features,
+
+145
+00:09:48.840 --> 00:09:52.641
+which is lots of different bumps,
+multi-modal, etc., etc.
+
+146
+00:09:52.641 --> 00:09:57.700
+But from the point of view of what
+information we really want to extract from
+
+147
+00:09:57.700 --> 00:10:02.360
+the data, which is when you're
+on that side it's red and
+
+148
+00:10:02.360 --> 00:10:05.460
+when you're on that side
+it's green of this point.
+
+149
+00:10:05.460 --> 00:10:08.536
+Those normal distributions do just fine.
+
+150
+00:10:08.536 --> 00:10:10.540
+It's an important point.
+
+151
+00:10:10.540 --> 00:10:15.900
+Your class conditional models might be
+quite bad as probability models and
+
+152
+00:10:15.900 --> 00:10:18.720
+still yield rather a good
+naive Bayes classifier.
+
+153
+00:10:18.720 --> 00:10:22.030
+This infuriates and
+frustrates people doing exercises.
+
+154
+00:10:22.030 --> 00:10:23.550
+It has two consequences.
+
+155
+00:10:23.550 --> 00:10:26.890
+One is the models that you think should
+work, might not work all that well.
+
+156
+00:10:26.890 --> 00:10:29.870
+The other is models that you think
+are awful, might work extremely well.
+
+157
+00:10:32.610 --> 00:10:36.450
+In practice, high dimensional data
+seems to exaggerate this effect.
+
+158
+00:10:38.150 --> 00:10:40.980
+You should remember that
+naive Bayes is really good at
+
+159
+00:10:40.980 --> 00:10:42.870
+dealing with high dimensional data.
+
+160
+00:10:42.870 --> 00:10:46.516
+And, in particular, when you deal
+with high dimensional data your class
+
+161
+00:10:46.516 --> 00:10:50.010
+conditional models don't have to be
+all that good for things to get away.
+
+162
+00:10:50.010 --> 00:10:54.890
+What you really need to be good
+at is knowing when Class 2 is
+
+163
+00:10:54.890 --> 00:10:59.340
+more likely than Class 1, not the details
+of what Class 2 does with its axis.
+
+164
+00:11:01.640 --> 00:11:03.720
+Okay, so let's do a worked example.
+
+165
+00:11:03.720 --> 00:11:10.180
+I got a breast tissue dataset from the UC
+Irvine Machine Learning Data Repository.
+
+166
+00:11:10.180 --> 00:11:13.430
+It contains measurements of a variety of
+properties of six different classes of
+
+167
+00:11:13.430 --> 00:11:14.450
+breast tissue.
+
+168
+00:11:14.450 --> 00:11:17.832
+So you want to build an evaluate a naive
+Bayes classifier to distinguish between
+
+169
+00:11:17.832 --> 00:11:22.227
+the classes automatically from
+the measurements So I used R for
+
+170
+00:11:22.227 --> 00:11:25.140
+this example because I could use packages.
+
+171
+00:11:25.140 --> 00:11:28.180
+You will notice in this course I spend
+relatively little time telling you how to
+
+172
+00:11:28.180 --> 00:11:33.680
+build software because I may not
+know under some circumstances and
+
+173
+00:11:33.680 --> 00:11:35.270
+I certainly don't care.
+
+174
+00:11:35.270 --> 00:11:38.569
+What I'm trying to do is show you
+how to obtain tools and use them.
+
+175
+00:11:39.640 --> 00:11:41.830
+So the main difficulty here is
+finding the right packages,
+
+176
+00:11:41.830 --> 00:11:45.130
+understanding the documentation and
+checking that they're right.
+
+177
+00:11:45.130 --> 00:11:48.730
+It's easy enough to write the source for
+this, this really isn't very difficult to
+
+178
+00:11:48.730 --> 00:11:52.530
+do, but why would you do something
+that somebody else had already done.
+
+179
+00:11:52.530 --> 00:11:55.020
+I used a package called Caret,
+
+180
+00:11:55.020 --> 00:11:58.590
+which is quite good at things like
+trying to split some cross-validation.
+
+181
+00:11:58.590 --> 00:12:02.980
+And I used a naive Bayes classifier
+which is in a package called klaR.
+
+182
+00:12:02.980 --> 00:12:07.160
+So I separated out the test set which
+was approximately 20% of the cases for
+
+183
+00:12:07.160 --> 00:12:10.890
+each class and then I trained with
+cross validation on the remainder.
+
+184
+00:12:10.890 --> 00:12:13.450
+I used a normal model for each feature.
+
+185
+00:12:13.450 --> 00:12:16.900
+And I got a class confusion matrix on
+the test set that looked like this.
+
+186
+00:12:18.070 --> 00:12:23.370
+So here are different kinds of tissue adi,
+car, con, fad, gla, mas.
+
+187
+00:12:24.470 --> 00:12:26.600
+True labels of it are here.
+
+188
+00:12:26.600 --> 00:12:28.440
+Predicted labels are there.
+
+189
+00:12:28.440 --> 00:12:33.020
+And you can see the diagonal here
+are where most of the big values are.
+
+190
+00:12:33.020 --> 00:12:34.350
+So we're doing okay.
+
+191
+00:12:34.350 --> 00:12:35.704
+The accuracy is 52%.
+
+192
+00:12:36.980 --> 00:12:40.040
+In the training data, the classes are
+nearly balanced, in those six classes, so
+
+193
+00:12:40.040 --> 00:12:43.760
+the chance is about 17%,
+so I'm doing okay here.
+
+194
+00:12:43.760 --> 00:12:48.660
+To get really accurate numbers I
+should average over test train splits,
+
+195
+00:12:48.660 --> 00:12:50.640
+and I haven't done that.

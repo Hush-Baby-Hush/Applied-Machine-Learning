@@ -1,0 +1,1069 @@
+WEBVTT
+
+1
+00:00:04.397 --> 00:00:09.509
+Hi, this is the first movie
+in the classification series.
+
+2
+00:00:09.509 --> 00:00:14.096
+I'm David Forsyth from the University
+of Illinois at Urbana-Champaign.
+
+3
+00:00:14.096 --> 00:00:16.288
+So what is classification?
+
+4
+00:00:16.288 --> 00:00:18.156
+As I go through these movies,
+
+5
+00:00:18.156 --> 00:00:23.182
+you'll get used to this habit of mine of
+sticking up little pieces of the notes.
+
+6
+00:00:23.182 --> 00:00:25.232
+Why?
+I wrote the notes because they allow me to
+
+7
+00:00:25.232 --> 00:00:27.192
+emphasize things that I
+want you to remember.
+
+8
+00:00:27.192 --> 00:00:33.438
+And you should think of these movies as
+ways of helping you go through the notes.
+
+9
+00:00:33.438 --> 00:00:34.748
+So what is a classifier?
+
+10
+00:00:34.748 --> 00:00:40.250
+It's a thing that accepts a set of
+features, and it produces a label.
+
+11
+00:00:40.250 --> 00:00:42.360
+They're trained on labeled examples.
+
+12
+00:00:42.360 --> 00:00:45.683
+But what I want is not to do well
+at labeled examples that I know,
+
+13
+00:00:45.683 --> 00:00:47.587
+because I already know the answer.
+
+14
+00:00:47.587 --> 00:00:51.331
+What I want to do is
+to do well at runtime.
+
+15
+00:00:51.331 --> 00:00:56.291
+Of course, to be able to train it, the
+data that I see at training time should
+
+16
+00:00:56.291 --> 00:01:00.478
+look, in some sense that I'm
+going to be vague and weasely about,
+
+17
+00:01:00.478 --> 00:01:02.200
+rather like future data.
+
+18
+00:01:04.250 --> 00:01:06.031
+So what does this definition do for us?
+
+19
+00:01:06.031 --> 00:01:11.537
+It really is anything that accepts
+a description of an object.
+
+20
+00:01:11.537 --> 00:01:14.030
+I will think of that as a feature vector.
+
+21
+00:01:14.030 --> 00:01:18.626
+And it's not even necessarily a vector,
+inasmuch as I might not be able to add and
+
+22
+00:01:18.626 --> 00:01:19.582
+subtract them.
+
+23
+00:01:19.582 --> 00:01:22.413
+It's a tuple of features,
+and it'll make a label.
+
+24
+00:01:22.413 --> 00:01:25.350
+This idea is hugely general and useful.
+
+25
+00:01:25.350 --> 00:01:28.118
+You run into classifiers all the time.
+
+26
+00:01:28.118 --> 00:01:34.327
+So for example, the credit card company
+has some kind of classification
+
+27
+00:01:34.327 --> 00:01:39.331
+procedure that sits in the back
+of some office somewhere.
+
+28
+00:01:39.331 --> 00:01:42.673
+And every time you try and pay for
+something with a credit card,
+
+29
+00:01:42.673 --> 00:01:46.711
+it tries to figure out whether it's you
+and you should be allowed to do it, or
+
+30
+00:01:46.711 --> 00:01:49.319
+it is some naughty person
+who should be stopped.
+
+31
+00:01:49.319 --> 00:01:53.390
+Many people watching these videos will
+have had the following experience.
+
+32
+00:01:53.390 --> 00:01:56.542
+If you go and
+buy gasoline with your credit card and
+
+33
+00:01:56.542 --> 00:02:01.422
+then immediately afterwards go and
+buy something expensive and frivolous,
+
+34
+00:02:01.422 --> 00:02:03.238
+then you get a phone number.
+
+35
+00:02:03.238 --> 00:02:06.334
+You might get the second transaction
+declined, if you're really lucky.
+
+36
+00:02:06.334 --> 00:02:11.776
+But you might also get a phone call
+from your credit card people saying,
+
+37
+00:02:11.776 --> 00:02:13.237
+what's going on?
+
+38
+00:02:13.237 --> 00:02:14.384
+Why?
+
+39
+00:02:14.384 --> 00:02:16.444
+Because if you steal a credit card,
+
+40
+00:02:16.444 --> 00:02:20.660
+the best way to check that it
+still works is to buy gas with it.
+
+41
+00:02:20.660 --> 00:02:22.341
+And once you've done that,
+you should go out and
+
+42
+00:02:22.341 --> 00:02:23.860
+buy something frivolous that you can sell.
+
+43
+00:02:23.860 --> 00:02:26.531
+Credit card companies know this, and
+
+44
+00:02:26.531 --> 00:02:32.131
+part of the classification procedure is
+to watch out for that sort of behavior.
+
+45
+00:02:32.131 --> 00:02:33.311
+I'm sure there are other things as well.
+
+46
+00:02:33.311 --> 00:02:34.660
+Here's another example.
+
+47
+00:02:34.660 --> 00:02:36.755
+Should this program be allowed to run?
+
+48
+00:02:36.755 --> 00:02:41.099
+These days, when you download a program,
+usually you operate as a classifier.
+
+49
+00:02:41.099 --> 00:02:43.710
+You download the program,
+you try and run it.
+
+50
+00:02:43.710 --> 00:02:47.480
+If your operating system is reasonably
+modern, it then says to you,
+
+51
+00:02:47.480 --> 00:02:49.870
+I don't trust this program
+because you downloaded it,
+
+52
+00:02:49.870 --> 00:02:52.520
+and it's probably
+going to wreck your disk.
+
+53
+00:02:52.520 --> 00:02:55.805
+And you then press a button saying,
+I don't care, it's my fault.
+
+54
+00:02:55.805 --> 00:02:59.810
+You're operating as a classifier,
+should it run, should it not run.
+
+55
+00:02:59.810 --> 00:03:04.755
+There are buildings in the South Bay
+in the Bay Area full of
+
+56
+00:03:04.755 --> 00:03:09.599
+people who write classifiers or
+improve classifiers to
+
+57
+00:03:09.599 --> 00:03:13.737
+determine whether a picture is naughty or
+not.
+
+58
+00:03:13.737 --> 00:03:16.354
+You can use your own
+definition of naughty, but
+
+59
+00:03:16.354 --> 00:03:19.569
+it usually involves the idea
+that it might shock someone.
+
+60
+00:03:19.569 --> 00:03:20.370
+Why?
+
+61
+00:03:20.370 --> 00:03:25.960
+Because people place advertising
+on web pages automatically.
+
+62
+00:03:25.960 --> 00:03:30.470
+And there are advertisers who do not want
+their products placed next to pictures
+
+63
+00:03:30.470 --> 00:03:31.350
+that might shock someone.
+
+64
+00:03:32.410 --> 00:03:35.130
+So it's very valuable and
+very useful to be able to say,
+
+65
+00:03:35.130 --> 00:03:38.460
+this picture might distress or
+offend or shock somebody.
+
+66
+00:03:38.460 --> 00:03:40.060
+And you want to be able
+to do that automatically.
+
+67
+00:03:41.450 --> 00:03:42.080
+Here's another.
+
+68
+00:03:42.080 --> 00:03:48.909
+I'm an automated vehicle, I'm driving
+around, a bad situation develops.
+
+69
+00:03:48.909 --> 00:03:53.786
+And I should either keep going forward or
+take a quick turn to try and
+
+70
+00:03:53.786 --> 00:03:57.193
+avoid something, which might be dangerous.
+
+71
+00:03:57.193 --> 00:04:00.965
+The road might be wet or slippery.
+
+72
+00:04:00.965 --> 00:04:04.767
+Question, the thing in front of me, is it
+something I can run over, like a squirrel?
+
+73
+00:04:04.767 --> 00:04:07.401
+I might regret it, but it's not
+going to lead to any serious trouble.
+
+74
+00:04:07.401 --> 00:04:11.088
+Or is it something I cannot run over,
+like a child?
+
+75
+00:04:11.088 --> 00:04:12.656
+Is this person sick?
+
+76
+00:04:12.656 --> 00:04:16.043
+You can abstract doctors as classifiers.
+
+77
+00:04:16.043 --> 00:04:19.590
+They take a bunch of features,
+and then they produce a label.
+
+78
+00:04:20.900 --> 00:04:22.360
+What disease does this person have?
+
+79
+00:04:22.360 --> 00:04:25.227
+Now they produce more kinds of labels.
+
+80
+00:04:25.227 --> 00:04:28.057
+Okay, so the idea is extremely useful and
+extremely general.
+
+81
+00:04:28.057 --> 00:04:29.550
+What do we do with it?
+
+82
+00:04:29.550 --> 00:04:33.846
+Well, before we can talk sense about
+how to build particular classifiers,
+
+83
+00:04:33.846 --> 00:04:36.139
+what we're going to need is a vocabulary.
+
+84
+00:04:36.139 --> 00:04:39.870
+So the first thing to think about is
+what kind of labels are we going to use.
+
+85
+00:04:39.870 --> 00:04:44.195
+A very important and very common kind
+of classifier is known as a binary
+
+86
+00:04:44.195 --> 00:04:47.510
+classifier, and it has two labels,
+binary for two.
+
+87
+00:04:47.510 --> 00:04:49.655
+The labels could be 1 or -1, or 1 or
+
+88
+00:04:49.655 --> 00:04:54.740
+0, you can turn one into the other very
+easily, or true or false, or whatever.
+
+89
+00:04:54.740 --> 00:04:58.710
+There are some methods that just sort of
+naturally produce binary classifiers.
+
+90
+00:04:58.710 --> 00:05:01.520
+Other methods produce other
+kinds of classifiers.
+
+91
+00:05:01.520 --> 00:05:04.374
+But the binary classifier is
+a really important example.
+
+92
+00:05:04.374 --> 00:05:08.374
+A multi-class classifier produces
+multiple different labels.
+
+93
+00:05:08.374 --> 00:05:14.026
+The labels could be ordinal in the sense
+of one, two, three, four, five.
+
+94
+00:05:14.026 --> 00:05:20.266
+Or they could be incomparable, so
+if you say something's a cat or
+
+95
+00:05:20.266 --> 00:05:25.836
+a dog, you can't really say
+that cats are less than dogs.
+
+96
+00:05:25.836 --> 00:05:31.080
+Or there's no really meaningful
+comparison between the numbers.
+
+97
+00:05:31.080 --> 00:05:34.757
+It turns out, people very often forget
+there is an option that classifiers have,
+
+98
+00:05:34.757 --> 00:05:36.210
+which is refusing to classify.
+
+99
+00:05:37.800 --> 00:05:40.300
+And that essentially is saying,
+I don't know, and
+
+100
+00:05:40.300 --> 00:05:42.710
+I don't want this example to count.
+
+101
+00:05:44.250 --> 00:05:47.694
+In some circumstances,
+that is practical and it's useful, and
+
+102
+00:05:47.694 --> 00:05:49.206
+it can affect performance.
+
+103
+00:05:49.206 --> 00:05:53.350
+So a classifier that knows when it's very
+likely to make a mistake may be better off
+
+104
+00:05:53.350 --> 00:05:57.630
+saying, I don't know what this is, and
+I've got no way of resolving the question.
+
+105
+00:05:58.660 --> 00:06:00.505
+Sometimes you can't allow that.
+
+106
+00:06:00.505 --> 00:06:03.712
+So if you're thinking about
+credit card transactions,
+
+107
+00:06:03.712 --> 00:06:08.134
+it's not really helpful to say,
+this one's good, this one's fraudulent.
+
+108
+00:06:08.134 --> 00:06:10.695
+And I've got no idea about this one,
+and I'm not going to deal with it.
+
+109
+00:06:10.695 --> 00:06:13.749
+You really do need to produce a decision.
+
+110
+00:06:13.749 --> 00:06:16.600
+Okay, now we need to think about errors.
+
+111
+00:06:16.600 --> 00:06:19.140
+Imagine I have a binary classifier.
+
+112
+00:06:19.140 --> 00:06:22.660
+There are special names for
+the errors that a binary classifier makes.
+
+113
+00:06:22.660 --> 00:06:26.768
+So if I have something that
+should be labeled false, here,
+
+114
+00:06:26.768 --> 00:06:28.994
+now I can use my neat little pen.
+
+115
+00:06:28.994 --> 00:06:31.928
+So it should be labeled false,
+and gee, I can change colors too.
+
+116
+00:06:31.928 --> 00:06:34.650
+But I actually labeled it true.
+
+117
+00:06:34.650 --> 00:06:37.463
+That's very often called a false positive.
+
+118
+00:06:37.463 --> 00:06:40.739
+I said it was true, but I'm wrong,
+so it's a false positive.
+
+119
+00:06:40.739 --> 00:06:43.565
+And it's sometimes called a type I error.
+
+120
+00:06:43.565 --> 00:06:47.833
+Similarly, if the right answer was true,
+and
+
+121
+00:06:47.833 --> 00:06:52.765
+I said false,
+I'm going to call that a false negative.
+
+122
+00:06:52.765 --> 00:06:54.869
+That's sometimes called a type II error.
+
+123
+00:06:56.570 --> 00:07:01.300
+Now, this gives us two natural
+measures of performance.
+
+124
+00:07:01.300 --> 00:07:03.709
+One is accuracy.
+
+125
+00:07:03.709 --> 00:07:08.539
+So the accuracy of a binary classifier, or
+the accuracy in fact of any classifier,
+
+126
+00:07:08.539 --> 00:07:12.428
+is the fraction of examples that
+have been correctly classified.
+
+127
+00:07:12.428 --> 00:07:14.600
+So I'm presented with
+a whole bunch of examples.
+
+128
+00:07:14.600 --> 00:07:18.916
+Some fraction is classified correctly,
+and that's the accuracy.
+
+129
+00:07:18.916 --> 00:07:21.556
+Similarly, the error
+rate is the fraction of
+
+130
+00:07:21.556 --> 00:07:24.204
+examples that are incorrectly classified.
+
+131
+00:07:24.204 --> 00:07:30.036
+And you sort of expect that
+accuracy equals 1 minus error rate,
+
+132
+00:07:30.036 --> 00:07:32.414
+just as a matter of logic.
+
+133
+00:07:34.533 --> 00:07:39.820
+Now, this may be news to some people,
+but it's an important concept.
+
+134
+00:07:39.820 --> 00:07:43.931
+Classifiers are pretty much
+guaranteed to make mistakes.
+
+135
+00:07:43.931 --> 00:07:46.209
+The question is,
+can you keep the mistakes down?
+
+136
+00:07:46.209 --> 00:07:48.094
+So here's a little example.
+
+137
+00:07:48.094 --> 00:07:50.200
+An alien arrives on the planet.
+
+138
+00:07:50.200 --> 00:07:55.180
+They would like to be able to predict the
+gender of the people they're dealing with,
+
+139
+00:07:55.180 --> 00:07:57.090
+which can simplify some social occasions.
+
+140
+00:07:57.090 --> 00:08:01.520
+And the only measurement that they
+possess is the height of the person.
+
+141
+00:08:01.520 --> 00:08:03.204
+Now, that alien is in trouble.
+
+142
+00:08:03.204 --> 00:08:07.072
+So what I've done is I've plotted over
+
+143
+00:08:07.072 --> 00:08:11.537
+here a histogram of
+heights against gender.
+
+144
+00:08:11.537 --> 00:08:15.057
+The blue one I believe is male.
+
+145
+00:08:15.057 --> 00:08:18.370
+The green one I believe is female.
+
+146
+00:08:18.370 --> 00:08:21.288
+And the height is in inches.
+
+147
+00:08:21.288 --> 00:08:23.564
+Why am I using outdated units?
+
+148
+00:08:23.564 --> 00:08:27.123
+Well, that's how I got the data, and
+I didn't feel like transforming.
+
+149
+00:08:27.123 --> 00:08:31.208
+So you'll notice that the alien is
+going to have to have some rule for
+
+150
+00:08:31.208 --> 00:08:32.480
+each height value.
+
+151
+00:08:32.480 --> 00:08:36.551
+And a simple rule would be to say, look,
+if the height is bigger than some number,
+
+152
+00:08:36.551 --> 00:08:39.330
+say male, otherwise, say female.
+
+153
+00:08:39.330 --> 00:08:40.878
+But that alien is going to make mistakes.
+
+154
+00:08:40.878 --> 00:08:45.828
+So imagine the alien says,
+choose a height that is bigger,
+
+155
+00:08:45.828 --> 00:08:49.987
+that is 60,
+this looks like about 68 inches.
+
+156
+00:08:49.987 --> 00:08:53.695
+And so everybody on that side is male,
+and everybody on that side is female.
+
+157
+00:08:53.695 --> 00:09:00.745
+These double hatched bars over
+here are mistakes, right?
+
+158
+00:09:00.745 --> 00:09:04.181
+So there are males that
+are shorter than 68 inches.
+
+159
+00:09:04.181 --> 00:09:06.464
+There are females that
+are taller than 68 inches.
+
+160
+00:09:06.464 --> 00:09:09.015
+And the alien is going
+to misclassify them.
+
+161
+00:09:09.015 --> 00:09:15.852
+It can't make its life easier by saying,
+well, I will have a more complicated rule.
+
+162
+00:09:15.852 --> 00:09:21.173
+So if I say, for example,
+everything bigger than
+
+163
+00:09:21.173 --> 00:09:26.506
+68 inches but
+smaller than 70 inches is male.
+
+164
+00:09:26.506 --> 00:09:30.870
+There are a whole bunch of females over
+here that the alien is going to get wrong.
+
+165
+00:09:30.870 --> 00:09:33.376
+Whatever the alien does,
+it's got a problem.
+
+166
+00:09:36.785 --> 00:09:41.745
+Now, there is a concept
+here worth mentioning.
+
+167
+00:09:41.745 --> 00:09:44.898
+It's kind of abstract, because we usually
+can't actually know what its value is, but
+
+168
+00:09:44.898 --> 00:09:45.745
+it's worth knowing.
+
+169
+00:09:45.745 --> 00:09:49.856
+Imagine I have a particular
+set of features.
+
+170
+00:09:49.856 --> 00:09:53.450
+And imagine for some reason,
+I know the best possible rule.
+
+171
+00:09:55.200 --> 00:09:58.730
+The error that I encounter when I
+use the best possible rule with that
+
+172
+00:09:58.730 --> 00:10:01.850
+set of features is called the Bayes error.
+
+173
+00:10:01.850 --> 00:10:05.850
+So in this case, the Bayes error is
+going to be, if I choose the best possible
+
+174
+00:10:06.880 --> 00:10:10.630
+rule, it's probably choose a high
+threshold somewhere round about there.
+
+175
+00:10:10.630 --> 00:10:17.030
+Everybody that side is male,
+everybody that side is female.
+
+176
+00:10:17.030 --> 00:10:19.450
+And you can see I've got a sort
+of pictorial representation
+
+177
+00:10:19.450 --> 00:10:20.840
+of the Bayes error.
+
+178
+00:10:20.840 --> 00:10:26.302
+Because it's going to be the fraction
+of females on this side,
+
+179
+00:10:26.302 --> 00:10:30.060
+so the area under these bars, and
+the fraction of males on that side,
+
+180
+00:10:30.060 --> 00:10:32.410
+the area under those bars,
+this one gets split.
+
+181
+00:10:34.686 --> 00:10:36.589
+Usually we can't know this.
+
+182
+00:10:36.589 --> 00:10:39.643
+Now, the reason we usually can't know this
+is we usually don't know what the best
+
+183
+00:10:39.643 --> 00:10:42.220
+possible rule is with
+a given set of features.
+
+184
+00:10:42.220 --> 00:10:44.430
+But the important thing is,
+it's usually not zero.
+
+185
+00:10:48.134 --> 00:10:50.794
+Now, we now have a problem.
+
+186
+00:10:50.794 --> 00:10:56.120
+We usually can't know the best possible
+accuracy for a classifier on a problem.
+
+187
+00:10:56.120 --> 00:10:59.190
+So we don't really know whether
+the one we have is good or not.
+
+188
+00:10:59.190 --> 00:11:03.964
+I will measure its accuracy, and
+I'll say, well, is that good?
+
+189
+00:11:03.964 --> 00:11:05.930
+And the answer is, I don't know.
+
+190
+00:11:05.930 --> 00:11:08.530
+There are several ways to
+get out of this problem.
+
+191
+00:11:08.530 --> 00:11:11.490
+One is to say, it's good enough for
+my purpose, so
+
+192
+00:11:11.490 --> 00:11:14.130
+I'm not going to worry about the question.
+
+193
+00:11:14.130 --> 00:11:16.350
+And that is, in fact,
+a very sensible answer.
+
+194
+00:11:16.350 --> 00:11:20.890
+There are many times where something
+that has 90% accuracy is wonderful.
+
+195
+00:11:20.890 --> 00:11:25.821
+And going from 90 to 92% doesn't matter
+to anyone, you just get on with it and
+
+196
+00:11:25.821 --> 00:11:26.328
+use it.
+
+197
+00:11:26.328 --> 00:11:28.010
+But there is another strategy,
+
+198
+00:11:28.010 --> 00:11:31.270
+which is you could compare to
+some other natural method.
+
+199
+00:11:31.270 --> 00:11:32.797
+That natural method is called a baseline.
+
+200
+00:11:39.677 --> 00:11:43.580
+And that baseline you sort of have
+to choose with sensible judgment.
+
+201
+00:11:43.580 --> 00:11:47.592
+So it might be another classifier or
+another kind of classifier.
+
+202
+00:11:47.592 --> 00:11:49.063
+It might be chance.
+
+203
+00:11:49.063 --> 00:11:55.386
+So chance says, I'm just going to assign
+examples to class uniformly and at random.
+
+204
+00:11:55.386 --> 00:11:59.162
+So for example, chance would get
+me 50% accuracy for a balanced,
+
+205
+00:11:59.162 --> 00:12:00.410
+two-class problem.
+
+206
+00:12:00.410 --> 00:12:04.800
+If I have as many ones as I have minus
+ones, and I assign them at random,
+
+207
+00:12:04.800 --> 00:12:07.339
+I'm going to get half of them right.
+
+208
+00:12:08.560 --> 00:12:10.281
+Notice, by the way,
+
+209
+00:12:10.281 --> 00:12:15.363
+that a binary classifier is
+at least 50% accurate, right?
+
+210
+00:12:15.363 --> 00:12:16.235
+Why?
+
+211
+00:12:16.235 --> 00:12:23.752
+Because if it's less than 50% accurate,
+I could always flip the bit and do better.
+
+212
+00:12:23.752 --> 00:12:28.671
+Another version or
+another plausible baseline is you assign
+
+213
+00:12:28.671 --> 00:12:31.956
+every example to the most common class.
+
+214
+00:12:31.956 --> 00:12:35.194
+This can be very hard to beat.
+
+215
+00:12:35.194 --> 00:12:40.029
+So imagine you have 99% honest
+
+216
+00:12:40.029 --> 00:12:44.347
+credit card transactions and
+
+217
+00:12:44.347 --> 00:12:49.200
+1% fraudulent transactions.
+
+218
+00:12:49.200 --> 00:12:52.050
+You can then say,
+every transaction is honest, and
+
+219
+00:12:52.050 --> 00:12:55.460
+any classifier that has to beat
+that has to be really, really good.
+
+220
+00:12:56.776 --> 00:13:00.170
+So assigning to the most common class can
+be hard to beat, and it's a good baseline.
+
+221
+00:13:02.110 --> 00:13:07.950
+In summary, a classifier accepts a feature
+representation and makes a label.
+
+222
+00:13:07.950 --> 00:13:09.955
+Classifiers are important and
+widely useful.
+
+223
+00:13:11.460 --> 00:13:13.720
+Classifiers are usually learned from data.
+
+224
+00:13:13.720 --> 00:13:17.560
+And every problem has some
+inevitable minimum error,
+
+225
+00:13:17.560 --> 00:13:20.220
+which is usually known as the Bayes error.
+
+226
+00:13:20.220 --> 00:13:23.050
+The problem with this is the Bayes
+error is hardly ever known.
+
+227
+00:13:24.580 --> 00:13:28.730
+Finally, it's usual to compare
+error to something else,
+
+228
+00:13:28.730 --> 00:13:31.230
+because you don't know the Bayes error.
+
+229
+00:13:31.230 --> 00:13:34.520
+So you might compare error to,
+for example, a baseline.
+
+230
+00:13:34.520 --> 00:13:36.420
+And I gave a variety of
+different baselines.

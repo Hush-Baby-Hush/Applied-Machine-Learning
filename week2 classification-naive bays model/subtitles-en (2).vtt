@@ -1,0 +1,905 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:03.435
+I'm David Forsyth, from the University of Illinois at Urbana-Champaign.
+
+2
+00:00:03.435 --> 00:00:05.503
+I'm going to talk about Nearest Neighbors classifiers.
+
+3
+00:00:05.503 --> 00:00:07.710
+This is our first real classifier as opposed
+
+4
+00:00:07.710 --> 00:00:10.140
+to just sort of talking about classifiers generically.
+
+5
+00:00:10.140 --> 00:00:14.940
+What I'm going to do is assume that features are a tuple of fixed size,
+
+6
+00:00:14.940 --> 00:00:17.635
+and that I can measure distances between tuples.
+
+7
+00:00:17.635 --> 00:00:21.545
+This usually means that features are really vectors of fixed dimensions,
+
+8
+00:00:21.545 --> 00:00:27.300
+so, my features in the credit card case might involve something like,
+
+9
+00:00:27.300 --> 00:00:29.721
+where the transaction was made,
+
+10
+00:00:29.721 --> 00:00:34.350
+how much money is involved,
+
+11
+00:00:34.350 --> 00:00:36.180
+where the previous transaction was made,
+
+12
+00:00:36.180 --> 00:00:37.350
+how much money was involved,
+
+13
+00:00:37.350 --> 00:00:41.777
+and that a variety of other numbers organized into a vector.
+
+14
+00:00:41.777 --> 00:00:43.255
+So, I've got a procedure,
+
+15
+00:00:43.255 --> 00:00:44.970
+and the procedure is very simple.
+
+16
+00:00:44.970 --> 00:00:47.160
+I will have a dataset,
+
+17
+00:00:47.160 --> 00:00:51.780
+which will consist of traditionally N pairs.
+
+18
+00:00:51.780 --> 00:00:54.720
+Why? Because, every dataset consists of N pairs,
+
+19
+00:00:54.720 --> 00:00:59.405
+and it turns out every feature vector has dimension D.
+
+20
+00:00:59.405 --> 00:01:04.760
+Each pair consists of a feature vector with dimension D and a label.
+
+21
+00:01:04.760 --> 00:01:06.470
+The label is the Y_1 through Y N,
+
+22
+00:01:06.470 --> 00:01:09.600
+the feature vector is the X_1 through X N. So,
+
+23
+00:01:09.600 --> 00:01:14.370
+let me name them.
+
+24
+00:01:14.370 --> 00:01:24.395
+Notice, that I did not say anything about what the label was.
+
+25
+00:01:24.395 --> 00:01:28.300
+So, now, I have a new feature vector X,
+
+26
+00:01:28.300 --> 00:01:30.570
+and I would like to predict its label.
+
+27
+00:01:30.570 --> 00:01:33.435
+You can think of this as a test item.
+
+28
+00:01:33.435 --> 00:01:37.500
+For some reason, people who do Nearest Neighbors a lot, call it a query.
+
+29
+00:01:37.500 --> 00:01:38.996
+So, I'm going to take this test item,
+
+30
+00:01:38.996 --> 00:01:42.360
+and what I'm going to do for Nearest Neighbors is I will
+
+31
+00:01:42.360 --> 00:01:45.900
+find the example that is closest to the query,
+
+32
+00:01:45.900 --> 00:01:51.035
+in the distance, and I will simply report that example's label.
+
+33
+00:01:51.035 --> 00:01:54.140
+So, I take my X over to here,
+
+34
+00:01:54.140 --> 00:01:55.465
+find the closest example,
+
+35
+00:01:55.465 --> 00:01:56.825
+pick out its label,
+
+36
+00:01:56.825 --> 00:01:59.990
+and that's Y closest.
+
+37
+00:01:59.990 --> 00:02:03.745
+That is the Nearest Neighbors classifier.
+
+38
+00:02:03.745 --> 00:02:05.035
+Here is a second algorithm,
+
+39
+00:02:05.035 --> 00:02:06.530
+which is also quite effective,
+
+40
+00:02:06.530 --> 00:02:08.790
+and in fact sometimes better.
+
+41
+00:02:08.790 --> 00:02:11.515
+Instead of finding the closest example,
+
+42
+00:02:11.515 --> 00:02:14.470
+I will find the K closest examples.
+
+43
+00:02:14.470 --> 00:02:17.855
+K is usually an odd number,
+
+44
+00:02:17.855 --> 00:02:19.702
+but it doesn't absolutely have to be,
+
+45
+00:02:19.702 --> 00:02:22.505
+and then I will vote on those labels.
+
+46
+00:02:22.505 --> 00:02:24.360
+So, I'll take those labels,
+
+47
+00:02:24.360 --> 00:02:25.665
+and I'll report the most common.
+
+48
+00:02:25.665 --> 00:02:28.360
+That is known as K Nearest Neighbors.
+
+49
+00:02:28.360 --> 00:02:30.790
+There's a variant of K Nearest Neighbors,
+
+50
+00:02:30.790 --> 00:02:32.627
+which is when I vote,
+
+51
+00:02:32.627 --> 00:02:37.690
+if the label with the largest number of votes has fewer than our votes,
+
+52
+00:02:37.690 --> 00:02:39.258
+then I say I've no idea what this is,
+
+53
+00:02:39.258 --> 00:02:41.440
+that's known as K R Nearest Neighbors.
+
+54
+00:02:41.440 --> 00:02:44.230
+I don't think I've ever seen anybody do that,
+
+55
+00:02:44.230 --> 00:02:46.800
+but I've seen it described in any number of places, so I'll mention it.
+
+56
+00:02:46.800 --> 00:02:48.040
+Here's an example, so,
+
+57
+00:02:48.040 --> 00:02:54.650
+remember our alien who wanted to classify people by gender,
+
+58
+00:02:54.650 --> 00:02:56.670
+by looking at their height,
+
+59
+00:02:56.670 --> 00:02:58.820
+I have marked a whole bunch of examples,
+
+60
+00:02:58.820 --> 00:03:00.870
+and I have separated these examples.
+
+61
+00:03:00.870 --> 00:03:02.745
+So, let me change colors.
+
+62
+00:03:02.745 --> 00:03:05.350
+I've marked a whole bunch of examples on our graph here.
+
+63
+00:03:05.350 --> 00:03:08.220
+This is height in inches,
+
+64
+00:03:08.220 --> 00:03:11.390
+I have separated these examples vertically,
+
+65
+00:03:11.390 --> 00:03:14.580
+purely for my own convenience in drawing.
+
+66
+00:03:14.580 --> 00:03:16.410
+This doesn't mean anything.
+
+67
+00:03:16.410 --> 00:03:19.055
+The female heights are down here,
+
+68
+00:03:19.055 --> 00:03:22.330
+the male heights are down there. This is from real data.
+
+69
+00:03:22.330 --> 00:03:27.547
+So, now my alien gets an example,
+
+70
+00:03:27.547 --> 00:03:30.105
+a query example, over here,
+
+71
+00:03:30.105 --> 00:03:34.740
+shall we say, and chooses the closest data point.
+
+72
+00:03:34.740 --> 00:03:40.575
+Now, the closest data point is a little hard to identify from the drawing,
+
+73
+00:03:40.575 --> 00:03:43.080
+because I'd need to run a perfectly straight,
+
+74
+00:03:43.080 --> 00:03:50.300
+vertical line, which is palpably beyond my powers, but it looks like this one.
+
+75
+00:03:50.300 --> 00:03:52.791
+So, for that query the alien would report male.
+
+76
+00:03:52.791 --> 00:03:57.304
+Now, notice for another query that's very close by,
+
+77
+00:03:57.304 --> 00:03:59.605
+the closest example would be that one,
+
+78
+00:03:59.605 --> 00:04:02.260
+and the alien would report female.
+
+79
+00:04:02.260 --> 00:04:04.420
+So, in this range,
+
+80
+00:04:04.420 --> 00:04:06.775
+from about here to about here,
+
+81
+00:04:06.775 --> 00:04:09.585
+the alien would sometimes report male,
+
+82
+00:04:09.585 --> 00:04:11.185
+and sometimes report female.
+
+83
+00:04:11.185 --> 00:04:15.310
+More females than males over here.
+
+84
+00:04:15.310 --> 00:04:19.248
+More males than females over there,
+
+85
+00:04:19.248 --> 00:04:20.830
+and then if I'm over here,
+
+86
+00:04:20.830 --> 00:04:25.135
+the alien is pretty much guaranteed to report male,
+
+87
+00:04:25.135 --> 00:04:31.059
+and over there, it's pretty much guaranteed to report female.
+
+88
+00:04:31.059 --> 00:04:35.180
+So, here's a neat thing about Nearest Neighbors that's being displayed by this drawing.
+
+89
+00:04:35.180 --> 00:04:38.360
+It really is quite responsive to the scatter of the data.
+
+90
+00:04:38.360 --> 00:04:42.050
+When the features are highly ambiguous,
+
+91
+00:04:42.050 --> 00:04:43.720
+then the answer tends to change a lot.
+
+92
+00:04:43.720 --> 00:04:45.125
+You make a tiny change in the feature,
+
+93
+00:04:45.125 --> 00:04:48.080
+and the label of the nearest thing changes.
+
+94
+00:04:48.080 --> 00:04:51.123
+When the features are profoundly unambiguous,
+
+95
+00:04:51.123 --> 00:04:53.159
+you get the answer right,
+
+96
+00:04:53.159 --> 00:04:56.470
+or at least you get the answer that agrees with the unambiguous features,
+
+97
+00:04:56.470 --> 00:04:57.725
+which one hopes is right.
+
+98
+00:04:57.725 --> 00:05:00.570
+There's some really significant virtues to Nearest Neighbors.
+
+99
+00:05:00.570 --> 00:05:02.250
+The labels can be anything.
+
+100
+00:05:02.250 --> 00:05:04.090
+I didn't say anything about what the labels were.
+
+101
+00:05:04.090 --> 00:05:05.785
+The example I did, they were male and female,
+
+102
+00:05:05.785 --> 00:05:08.225
+but they really can be anything.
+
+103
+00:05:08.225 --> 00:05:11.190
+Nearest Neighbors usually gets better with more data.
+
+104
+00:05:11.190 --> 00:05:13.255
+Now, gets better, by gets better,
+
+105
+00:05:13.255 --> 00:05:14.945
+I mean more accurate.
+
+106
+00:05:14.945 --> 00:05:18.550
+This does depend on the dimension of the data, and that is important.
+
+107
+00:05:18.550 --> 00:05:22.420
+To get really good Nearest Neighbors with
+
+108
+00:05:22.420 --> 00:05:26.665
+high dimensions requires completely implausible quantities of data,
+
+109
+00:05:26.665 --> 00:05:27.970
+unless you have a nice problem.
+
+110
+00:05:27.970 --> 00:05:29.790
+Nearest Neighbors is in fact,
+
+111
+00:05:29.790 --> 00:05:31.465
+can be very well-behaved in practice.
+
+112
+00:05:31.465 --> 00:05:33.460
+A bunch of problems seem to be nice,
+
+113
+00:05:33.460 --> 00:05:37.925
+and you can show that with enough data the error rate is twice the base error.
+
+114
+00:05:37.925 --> 00:05:41.420
+This, doing this formally requires a bit of a performance.
+
+115
+00:05:41.420 --> 00:05:44.935
+If you recognize informal mathematics when it's being done,
+
+116
+00:05:44.935 --> 00:05:49.870
+you should have noticed that what I did in the previous example
+
+117
+00:05:49.870 --> 00:05:52.480
+is a sketch that would put you
+
+118
+00:05:52.480 --> 00:05:55.840
+in roughly the right position to understand why this might be.
+
+119
+00:05:55.840 --> 00:05:58.120
+There are some real problems with Nearest Neighbors as well.
+
+120
+00:05:58.120 --> 00:06:02.913
+One problem, many people don't understand just how hard this problem can be,
+
+121
+00:06:02.913 --> 00:06:04.720
+is it can be very difficult to find
+
+122
+00:06:04.720 --> 00:06:07.630
+the nearest neighbor of a point in a high dimensional space.
+
+123
+00:06:07.630 --> 00:06:08.950
+This is an odd problem,
+
+124
+00:06:08.950 --> 00:06:12.505
+and it's odd because your intuition will say,
+
+125
+00:06:12.505 --> 00:06:14.185
+a tree gets involved,
+
+126
+00:06:14.185 --> 00:06:17.455
+and the whole thing becomes logarithmic,
+
+127
+00:06:17.455 --> 00:06:19.600
+and intuition has said that to people
+
+128
+00:06:19.600 --> 00:06:22.590
+for something like 40 years now, and it's been wrong.
+
+129
+00:06:22.590 --> 00:06:28.136
+It turns out finding the exact nearest neighbor in a high dimensional space,
+
+130
+00:06:28.136 --> 00:06:32.995
+about the best available algorithm is essentially take your query point,
+
+131
+00:06:32.995 --> 00:06:34.940
+check its distance to the first example,
+
+132
+00:06:34.940 --> 00:06:36.770
+now check its distance to the second example,
+
+133
+00:06:36.770 --> 00:06:39.120
+now check its distance to the third example,
+
+134
+00:06:39.120 --> 00:06:41.480
+and keep the example with the smallest distance.
+
+135
+00:06:41.480 --> 00:06:44.855
+Surprisingly, if you are willing to
+
+136
+00:06:44.855 --> 00:06:48.530
+deal with what's known as an approximate nearest neighbor, i.e.
+
+137
+00:06:48.530 --> 00:06:53.837
+find a point that with high probability is almost as close as the nearest neighbor,
+
+138
+00:06:53.837 --> 00:06:57.617
+the problem becomes much easier and you can do it much much, more quickly.
+
+139
+00:06:57.617 --> 00:07:02.013
+I'll talk about that in a couple of slides.
+
+140
+00:07:02.013 --> 00:07:05.610
+A second vice is that the metric matters and it can be hard to estimate.
+
+141
+00:07:05.610 --> 00:07:08.480
+So, one example that shows that the metric might
+
+142
+00:07:08.480 --> 00:07:11.568
+be a real issue is poorly scaled features.
+
+143
+00:07:11.568 --> 00:07:16.825
+Imagine my alien wishes to improve his classifier,
+
+144
+00:07:16.825 --> 00:07:20.160
+or its classifier of human gender,
+
+145
+00:07:20.160 --> 00:07:23.670
+and adds to the feature a second feature,
+
+146
+00:07:23.670 --> 00:07:28.740
+which is the measure of the length of the thumbnail in millimeters.
+
+147
+00:07:28.740 --> 00:07:35.310
+Now, your thumbnail runs to probably somewhere between 7 and 15 millimeters or so.
+
+148
+00:07:35.310 --> 00:07:38.100
+The height is measured in inches which is about
+
+149
+00:07:38.100 --> 00:07:41.790
+70 and it may very well be the case that the poor scaling
+
+150
+00:07:41.790 --> 00:07:48.306
+between the features means that one or the other of the features is always ignored.
+
+151
+00:07:48.306 --> 00:07:51.480
+If I have a number that goes in the range as the heights do,
+
+152
+00:07:51.480 --> 00:07:55.525
+from about 50 to about 75,
+
+153
+00:07:55.525 --> 00:07:58.415
+the distance in that number is going to be quite large.
+
+154
+00:07:58.415 --> 00:08:00.670
+If I have a number that, like fingernails,
+
+155
+00:08:00.670 --> 00:08:04.946
+runs from about 9 to about 14,
+
+156
+00:08:04.946 --> 00:08:07.360
+the distances in those numbers are going to be quite small.
+
+157
+00:08:07.360 --> 00:08:09.905
+So, the nearest neighbor is going to be completely dominated
+
+158
+00:08:09.905 --> 00:08:13.520
+by the measurement of thumbnail length.
+
+159
+00:08:13.520 --> 00:08:16.805
+And of course that doesn't tell you very much about gender, so, you have a problem.
+
+160
+00:08:16.805 --> 00:08:19.210
+Now, if you understand something about your problem,
+
+161
+00:08:19.210 --> 00:08:21.870
+you may actually be able to re-scale the features,
+
+162
+00:08:21.870 --> 00:08:26.140
+but if you know nothing, it might be very difficult.
+
+163
+00:08:26.140 --> 00:08:31.130
+Good performance of Nearest Neighbors can be quite hard in high dimensions,
+
+164
+00:08:31.130 --> 00:08:33.685
+and it can require very large datasets,
+
+165
+00:08:33.685 --> 00:08:35.370
+which may or may not be available.
+
+166
+00:08:35.370 --> 00:08:37.885
+Now the solution to the difficulty with
+
+167
+00:08:37.885 --> 00:08:41.580
+finding the Nearest Neighbors is to adopt an approximate Nearest Neighbors algorithm.
+
+168
+00:08:41.580 --> 00:08:46.789
+Most current nearest neighbor classifiers actually find the approximate nearest neighbor,
+
+169
+00:08:46.789 --> 00:08:50.885
+that's a point that is almost as close as the nearest neighbor with high probability,
+
+170
+00:08:50.885 --> 00:08:55.840
+and it turns out that that point is just fine for classification purposes.
+
+171
+00:08:55.840 --> 00:08:58.060
+There are two strategies for finding that point.
+
+172
+00:08:58.060 --> 00:08:59.440
+One, is you build a KD tree,
+
+173
+00:08:59.440 --> 00:09:02.435
+and you use a form of limited backtracking.
+
+174
+00:09:02.435 --> 00:09:04.510
+The other is you use a hashing strategy,
+
+175
+00:09:04.510 --> 00:09:07.210
+and it turns out what is attractive about
+
+176
+00:09:07.210 --> 00:09:10.390
+these methods is you can auto tune them on a dataset.
+
+177
+00:09:10.390 --> 00:09:12.715
+So, you have a dataset of N examples,
+
+178
+00:09:12.715 --> 00:09:17.950
+you can take the query method and you can search over a variety of
+
+179
+00:09:17.950 --> 00:09:23.260
+different parameters to find the instance of the query method,
+
+180
+00:09:23.260 --> 00:09:27.490
+that gives you the best behavior for that particular dataset.
+
+181
+00:09:27.490 --> 00:09:30.335
+This can be extremely useful if you're going to run a lot of queries.
+
+182
+00:09:30.335 --> 00:09:31.810
+There is great software available,
+
+183
+00:09:31.810 --> 00:09:36.070
+a callout for David Lowe's FLANN software,
+
+184
+00:09:36.070 --> 00:09:38.200
+which is what I like for
+
+185
+00:09:38.200 --> 00:09:42.545
+approximate Nearest Neighbors and that is very useful for reasonably sized problems.
+
+186
+00:09:42.545 --> 00:09:47.255
+Here's a worked example. Again, you'll notice a cut out from the test,
+
+187
+00:09:47.255 --> 00:09:49.540
+classifying using Nearest Neighbors.
+
+188
+00:09:49.540 --> 00:09:52.925
+Build a nearest neighbor classifier to classify the MNIST digit data.
+
+189
+00:09:52.925 --> 00:09:58.280
+The MNIST data is a dataset that's very widely used to check simple methods.
+
+190
+00:09:58.280 --> 00:10:02.120
+It's a bunch of hand-written digits with the correct label.
+
+191
+00:10:02.120 --> 00:10:04.605
+It's split into a test and a training set.
+
+192
+00:10:04.605 --> 00:10:06.345
+You can find it in several places,
+
+193
+00:10:06.345 --> 00:10:10.300
+and it's comprehensively explored in the exercises.
+
+194
+00:10:10.300 --> 00:10:14.050
+I used the Kaggle version simply because I was lazy. So, here's what happened.
+
+195
+00:10:14.050 --> 00:10:18.105
+I went to R, and R has nearest neighbor code that seems quite good.
+
+196
+00:10:18.105 --> 00:10:19.480
+I haven't had any problems with it.
+
+197
+00:10:19.480 --> 00:10:22.000
+I didn't want to use FLANN.
+
+198
+00:10:22.000 --> 00:10:23.405
+There isn't really very much to say.
+
+199
+00:10:23.405 --> 00:10:28.060
+The test examples or queries,
+
+200
+00:10:28.060 --> 00:10:30.070
+the training examples, the training dataset,
+
+201
+00:10:30.070 --> 00:10:32.760
+you tell the R code, which is which.
+
+202
+00:10:32.760 --> 00:10:37.430
+I trained on a thousand of the 42,000 examples. Why do I do that?
+
+203
+00:10:37.430 --> 00:10:39.520
+I did that because it was idle,
+
+204
+00:10:39.520 --> 00:10:45.055
+and because I recognized that a query against 42,000 examples was going to be a problem.
+
+205
+00:10:45.055 --> 00:10:47.330
+And then I tested on the next 200 examples.
+
+206
+00:10:47.330 --> 00:10:50.090
+If you were doing a full scale experiment,
+
+207
+00:10:50.090 --> 00:10:53.075
+you'd train on all 42,000 examples,
+
+208
+00:10:53.075 --> 00:10:55.000
+and you'd test on all,
+
+209
+00:10:55.000 --> 00:10:57.610
+I think, 10,000 test examples.
+
+210
+00:10:57.610 --> 00:10:59.940
+For my rather small case,
+
+211
+00:10:59.940 --> 00:11:02.775
+I found a class confusion matrix as shown.
+
+212
+00:11:02.775 --> 00:11:04.915
+Remember the meaning of this matrix.
+
+213
+00:11:04.915 --> 00:11:09.170
+So, for example, this cell is the digits
+
+214
+00:11:09.170 --> 00:11:13.670
+that have true label six and where I predicted the label two,
+
+215
+00:11:13.670 --> 00:11:15.140
+and there aren't any of those.
+
+216
+00:11:15.140 --> 00:11:20.670
+Big thing about the class confusion matrix is the big numbers are on the diagonal.
+
+217
+00:11:20.670 --> 00:11:24.495
+There are very few big numbers anywhere else. It works rather well.
+
+218
+00:11:24.495 --> 00:11:25.825
+I didn't put the class error rates in,
+
+219
+00:11:25.825 --> 00:11:27.780
+because I couldn't remember the magic line of R when I did
+
+220
+00:11:27.780 --> 00:11:30.225
+the worked example, that's your problem.
+
+221
+00:11:30.225 --> 00:11:32.605
+As you'll see, there are exercises about MNIST,
+
+222
+00:11:32.605 --> 00:11:37.410
+and you can do a bigger version. So, here's the summary.
+
+223
+00:11:37.410 --> 00:11:39.855
+Nearest neighbor classifiers are often very effective.
+
+224
+00:11:39.855 --> 00:11:41.595
+They can predict any kind of label.
+
+225
+00:11:41.595 --> 00:11:43.545
+You do need to be careful to have enough data,
+
+226
+00:11:43.545 --> 00:11:45.780
+and to have a meaningful distance function.

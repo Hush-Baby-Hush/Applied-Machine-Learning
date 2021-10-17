@@ -1,0 +1,169 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:03.033
+This is David Forsyth from the University of Illinois.
+
+2
+00:00:03.033 --> 00:00:07.522
+Let's do a sum. Here, split one.
+
+3
+00:00:07.522 --> 00:00:15.588
+Here, split two, and I'm interested in the entropy of a label,
+
+4
+00:00:15.588 --> 00:00:21.605
+condition on no split minus
+
+5
+00:00:21.605 --> 00:00:29.265
+the entropy of the label, condition on split.
+
+6
+00:00:29.265 --> 00:00:32.087
+It's two split one.
+
+7
+00:00:32.087 --> 00:00:35.570
+Okay, so let me compute the entropy of label given no split.
+
+8
+00:00:35.570 --> 00:00:45.220
+Well, given no split P of X is three over five.
+
+9
+00:00:45.220 --> 00:00:49.530
+So H of label condition on no split will
+
+10
+00:00:49.530 --> 00:00:59.225
+be minus three of the five log three of the five,
+
+11
+00:00:59.225 --> 00:01:06.240
+minus two of the five, log, two over five.
+
+12
+00:01:06.240 --> 00:01:10.321
+I computed that on my calculator which for some reason wouldn't do log two so I computed
+
+13
+00:01:10.321 --> 00:01:17.370
+it in knots rather than bits and I got .67.
+
+14
+00:01:17.370 --> 00:01:22.745
+Now, H of label condition on split is more interesting.
+
+15
+00:01:22.745 --> 00:01:25.725
+So, if I have a split,
+
+16
+00:01:25.725 --> 00:01:28.929
+I don't know which side I'm going to go onto.
+
+17
+00:01:28.929 --> 00:01:32.100
+So, I have to think about P of left and P of right.
+
+18
+00:01:32.100 --> 00:01:38.645
+P of left is going to be two over five.
+
+19
+00:01:38.645 --> 00:01:48.990
+Just by I. P of right is three over five and H should label
+
+20
+00:01:48.990 --> 00:01:57.725
+given split is going to be H of label given left times two over
+
+21
+00:01:57.725 --> 00:02:01.635
+five plus H of
+
+22
+00:02:01.635 --> 00:02:09.560
+label given R times three over five.
+
+23
+00:02:09.560 --> 00:02:12.800
+Now all this is simplified a little bit because H of label
+
+24
+00:02:12.800 --> 00:02:16.930
+conditioned on the left is zero.
+
+25
+00:02:16.930 --> 00:02:20.045
+Why? Because if you go left, you know what the label is.
+
+26
+00:02:20.045 --> 00:02:22.827
+And the label is X. So this is zero.
+
+27
+00:02:22.827 --> 00:02:25.990
+And H of label given right is again,
+
+28
+00:02:25.990 --> 00:02:27.350
+fairly easy to compute,
+
+29
+00:02:27.350 --> 00:02:37.780
+that is going to be minus one third log one over three minus two thirds,
+
+30
+00:02:37.780 --> 00:02:41.555
+log two over three.
+
+31
+00:02:41.555 --> 00:02:48.645
+This expression H of label condition on split is going to be .65.
+
+32
+00:02:48.645 --> 00:02:53.355
+So, my total information gain is going to be.02.
+
+33
+00:02:53.355 --> 00:02:56.300
+If you push through the same calculation, again, in nought,
+
+34
+00:02:56.300 --> 00:03:01.820
+because I only had a lin on my calculator, for side two,
+
+35
+00:03:01.820 --> 00:03:05.705
+the information gained is going to be .01,
+
+36
+00:03:05.705 --> 00:03:07.825
+rather than .02 nought.
+
+37
+00:03:07.825 --> 00:03:10.290
+And by I, that seems feeling natural.
+
+38
+00:03:10.290 --> 00:03:11.840
+Side one, if I go left,
+
+39
+00:03:11.840 --> 00:03:13.860
+I'm in really good shape.
+
+40
+00:03:13.860 --> 00:03:17.190
+If I go right, I'm about as good shape as I was.
+
+41
+00:03:17.190 --> 00:03:20.015
+Side two, if I go right, I'm clueless.
+
+42
+00:03:20.015 --> 00:03:25.000
+If I get left, I'm in about as good shape as I would so one looks better than two.

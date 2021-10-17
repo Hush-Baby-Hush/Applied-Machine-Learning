@@ -1,0 +1,671 @@
+WEBVTT
+
+1
+00:00:00.420 --> 00:00:03.220
+This is David Forsyth from
+the University of Illinois and
+
+2
+00:00:03.220 --> 00:00:05.520
+I'm going to talk about the hinge loss.
+
+3
+00:00:05.520 --> 00:00:07.500
+So now, here's my big problem.
+
+4
+00:00:07.500 --> 00:00:12.160
+I need to find the a and
+b that makes my classifier work well.
+
+5
+00:00:12.160 --> 00:00:13.766
+So I want some terminology.
+
+6
+00:00:13.766 --> 00:00:18.424
+I will just use the term decision
+boundary to refer to when
+
+7
+00:00:18.424 --> 00:00:24.380
+a transpose the points, where
+a transpose x plus b is equal to zero.
+
+8
+00:00:24.380 --> 00:00:25.580
+That is always a hyper plane.
+
+9
+00:00:25.580 --> 00:00:28.206
+So in 1D, it's a point.
+
+10
+00:00:28.206 --> 00:00:29.329
+In 2D, it's a line.
+
+11
+00:00:29.329 --> 00:00:30.696
+In 3D, it's a plane.
+
+12
+00:00:30.696 --> 00:00:34.870
+In 4D, it's a 3D hyper plane and so on.
+
+13
+00:00:34.870 --> 00:00:40.050
+What we're going to do is,
+on what we have is on one side,
+
+14
+00:00:40.050 --> 00:00:43.020
+examples are negative,
+on the other side they're positive.
+
+15
+00:00:43.020 --> 00:00:48.208
+What we need to do is to choose A and
+B that minimizes some cost where the cost
+
+16
+00:00:48.208 --> 00:00:53.916
+gets the training examples, mostly on
+the right side of the decision boundary.
+
+17
+00:00:53.916 --> 00:00:57.831
+And this is the tricky bit,
+and ensures the test examples,
+
+18
+00:00:57.831 --> 00:01:02.860
+which I don't see in training so they
+will worry, are on the right side too.
+
+19
+00:01:04.860 --> 00:01:05.530
+That's the tricky one.
+
+20
+00:01:07.100 --> 00:01:09.860
+We are going to use a cost function
+that will take the following form.
+
+21
+00:01:09.860 --> 00:01:13.440
+There is some cost to
+do with training error.
+
+22
+00:01:13.440 --> 00:01:16.580
+And there's a second cost,
+which is a penalty term,
+
+23
+00:01:16.580 --> 00:01:20.608
+which will be used to ensure the test
+examples are on the right side as well.
+
+24
+00:01:20.608 --> 00:01:23.050
+So I'm going to talk about the training
+error cost first, because it's easier.
+
+25
+00:01:25.350 --> 00:01:27.640
+So let me think about
+the training error cost.
+
+26
+00:01:27.640 --> 00:01:33.058
+For any training vector Xi,
+I'm going to associate with
+
+27
+00:01:33.058 --> 00:01:38.609
+that vector Xi gamma,
+which will be a transpose Xi + b.
+
+28
+00:01:38.609 --> 00:01:42.245
+And the reason I'm writing out that gamma
+is simply because I don't want to write
+
+29
+00:01:42.245 --> 00:01:43.718
+a transpose Xi + b everywhere.
+
+30
+00:01:43.718 --> 00:01:47.161
+It just makes the equation shorter,
+there's noting significant about it.
+
+31
+00:01:47.161 --> 00:01:55.430
+So my cost is going to have the form
+compare gamma, To the right answer.
+
+32
+00:01:55.430 --> 00:01:58.620
+The right answer is either one or
+minus one, depending on the label.
+
+33
+00:01:58.620 --> 00:02:01.017
+Remember my labels were either one or
+minus one.
+
+34
+00:02:01.017 --> 00:02:05.463
+Now, I would like my training
+cost to have the form of
+
+35
+00:02:05.463 --> 00:02:08.545
+an average of cost at examples.
+
+36
+00:02:08.545 --> 00:02:11.375
+So one of the N makes an average,
+why do I care about that?
+
+37
+00:02:11.375 --> 00:02:14.745
+Because I don't really want the number
+to change if I have more examples or
+
+38
+00:02:14.745 --> 00:02:16.215
+fewer examples.
+
+39
+00:02:16.215 --> 00:02:19.045
+And I'm going to sum at each example.
+
+40
+00:02:19.045 --> 00:02:22.165
+Something tells me how well
+I'm doing on that example.
+
+41
+00:02:22.165 --> 00:02:27.120
+Remember, this gamma depends on a and b.
+
+42
+00:02:27.120 --> 00:02:28.400
+They're just hidden in the gamma.
+
+43
+00:02:29.850 --> 00:02:33.400
+Now, let's talk about what we want
+from that training error cost.
+
+44
+00:02:33.400 --> 00:02:35.530
+Good properties from that cost function.
+
+45
+00:02:35.530 --> 00:02:40.090
+So the first property I
+want is if gamma i and
+
+46
+00:02:40.090 --> 00:02:45.860
+yi have different signs,
+then that means my a and
+
+47
+00:02:45.860 --> 00:02:50.110
+b predict the wrong sign at this example,
+it's making an error.
+
+48
+00:02:51.330 --> 00:02:53.480
+So there's should be some large cost.
+
+49
+00:02:53.480 --> 00:02:56.840
+I don't want to make errors,
+I want it to be expensive to make errors.
+
+50
+00:02:56.840 --> 00:03:01.625
+Furthermore, if gamma i and yi have
+different signs and gamma is really big,
+
+51
+00:03:01.625 --> 00:03:06.116
+has large magnitude, then the classifier's
+probably going to make wrong
+
+52
+00:03:06.116 --> 00:03:10.187
+predictions for test examples that
+are close to Xi as well, why?
+
+53
+00:03:10.187 --> 00:03:14.290
+Because gamma has large magnitude,
+meaning Xi is far away from the boundary.
+
+54
+00:03:15.510 --> 00:03:19.070
+So C should be really big in that case.
+
+55
+00:03:19.070 --> 00:03:24.310
+So I want C to get bigger as
+the magnitude of gamma i gets larger
+
+56
+00:03:24.310 --> 00:03:29.040
+when yi and gamma i have different signs.
+
+57
+00:03:29.040 --> 00:03:33.785
+Now, if yi and
+gamma i have the same signs, but
+
+58
+00:03:33.785 --> 00:03:38.898
+gamma i has small magnitude,
+then what that means
+
+59
+00:03:38.898 --> 00:03:44.513
+is xi is quite close to an x
+where a transpose x + b = 0.
+
+60
+00:03:44.513 --> 00:03:45.923
+Now, if it moves just
+a little bit further,
+
+61
+00:03:45.923 --> 00:03:48.150
+it'll get on the other side of
+the boundary, and I don't want that.
+
+62
+00:03:49.510 --> 00:03:55.500
+So if gamma i is small, then the classify
+might classify Xi correctly but
+
+63
+00:03:55.500 --> 00:03:58.230
+it might not classify
+points nearby correctly.
+
+64
+00:03:59.640 --> 00:04:03.654
+So I want C to not be zero, in this case.
+
+65
+00:04:03.654 --> 00:04:05.290
+I want it to be small, but not zero.
+
+66
+00:04:06.600 --> 00:04:09.690
+Finally, if they both have the same sign,
+and
+
+67
+00:04:09.690 --> 00:04:12.579
+gamma i has large magnitude,
+then C can be zero.
+
+68
+00:04:14.240 --> 00:04:17.180
+So these are three very
+desirable features of a cost.
+
+69
+00:04:17.180 --> 00:04:22.230
+Now, what I'm going to do is pull the cost
+that everybody uses because it's very
+
+70
+00:04:22.230 --> 00:04:26.240
+good, and it works better than anything
+else as far as we know, out of my ear and
+
+71
+00:04:26.240 --> 00:04:29.630
+then explain that it has
+these good properties.
+
+72
+00:04:29.630 --> 00:04:30.380
+So here's the cost.
+
+73
+00:04:30.380 --> 00:04:31.570
+It's known as the Hinge Loss.
+
+74
+00:04:34.860 --> 00:04:38.054
+I say the cost of gamma and
+
+75
+00:04:38.054 --> 00:04:43.500
+y is the maximum of 0 or 1- y gamma.
+
+76
+00:04:43.500 --> 00:04:47.280
+And it has these properties,
+so let's visualize that cost.
+
+77
+00:04:47.280 --> 00:04:53.420
+If yi and gamma i have different signs,
+then this term is negative,
+
+78
+00:04:53.420 --> 00:04:59.130
+which means this term is positive,
+which means it's expensive.
+
+79
+00:04:59.130 --> 00:05:04.550
+And if gamma is big, then C is big,
+so we have the first property.
+
+80
+00:05:05.630 --> 00:05:10.482
+If yi and gamma i have the same sign,
+but yi gamma i is less than 1,
+
+81
+00:05:10.482 --> 00:05:14.741
+meaning gamma i is kind of small,
+then there is some cost.
+
+82
+00:05:14.741 --> 00:05:16.380
+Why is there some cost?
+
+83
+00:05:16.380 --> 00:05:20.180
+Because now,
+this term over this term is positive,
+
+84
+00:05:20.180 --> 00:05:24.730
+it's not positive enough to knock
+out that 1, and I get some number.
+
+85
+00:05:24.730 --> 00:05:28.770
+But if yi times gamma i is bigger than 1,
+the classifier
+
+86
+00:05:28.770 --> 00:05:32.239
+breaks the sign correctly and x as far
+from the boundary, there is no cost.
+
+87
+00:05:33.290 --> 00:05:35.560
+So we can visualize this.
+
+88
+00:05:35.560 --> 00:05:37.995
+So we can visualize this, I'm going to
+make a little drawing over here.
+
+89
+00:05:37.995 --> 00:05:47.412
+Imagine, yi
+
+90
+00:05:47.412 --> 00:05:50.253
+= 1.
+
+91
+00:05:51.800 --> 00:05:54.420
+On the horizontal,
+I'm going to put gamma i and
+
+92
+00:05:54.420 --> 00:05:57.470
+then I'm going to plot the cost
+as the function of gamma i.
+
+93
+00:05:57.470 --> 00:06:02.930
+If gamma i is equal to 1,
+then the cost is 0.
+
+94
+00:06:02.930 --> 00:06:08.030
+If gamma i is bigger than 1,
+the cost is 0.
+
+95
+00:06:08.030 --> 00:06:12.630
+But if gamma i is smaller than 1,
+the cost gross linearly.
+
+96
+00:06:12.630 --> 00:06:16.816
+And in fact, we know with what slope
+because if gamma i is equal to 0,
+
+97
+00:06:16.816 --> 00:06:18.590
+then the cost is equal to 1.
+
+98
+00:06:18.590 --> 00:06:19.870
+So the cost looks like that.
+
+99
+00:06:21.950 --> 00:06:25.050
+If gamma i is really positive, it's free.
+
+100
+00:06:25.050 --> 00:06:27.176
+If gamma i is slightly positive, we'd pay.
+
+101
+00:06:27.176 --> 00:06:31.860
+And if gamma i is really negative,
+we pay a lot, which is what we want.
+
+102
+00:06:35.090 --> 00:06:36.800
+Now, there is a problem here.
+
+103
+00:06:36.800 --> 00:06:38.830
+So, one way to see this problem,
+
+104
+00:06:38.830 --> 00:06:44.490
+is if the training examples all have 0
+hinge loss, the classifier is not unique.
+
+105
+00:06:44.490 --> 00:06:45.490
+How could that happen?
+
+106
+00:06:45.490 --> 00:06:48.820
+Well, let me draw a little
+data set up here.
+
+107
+00:06:48.820 --> 00:06:53.400
+Imagine all my pluses are up there.
+
+108
+00:06:53.400 --> 00:06:57.073
+Some of them are Xs apparently, but
+we'll make the rest of them pluses.
+
+109
+00:06:57.073 --> 00:07:00.189
+And all my minuses are down here.
+
+110
+00:07:00.189 --> 00:07:05.048
+Then there's a line that separates them
+that's very far away from both sides,
+
+111
+00:07:05.048 --> 00:07:07.840
+so each of these could
+have a hinge loss of 0.
+
+112
+00:07:07.840 --> 00:07:10.751
+Now, notice if that's the case,
+the classifier is not unique.
+
+113
+00:07:10.751 --> 00:07:14.830
+2 times a and 2 times b is just as
+good a times b, which is a nuisance.
+
+114
+00:07:16.420 --> 00:07:22.310
+But now, let me think about the hinge loss
+for some unknown future test example.
+
+115
+00:07:22.310 --> 00:07:24.010
+Now, it's important that it is unknown.
+
+116
+00:07:26.010 --> 00:07:32.062
+If the text example has feature
+vector X and unknown label y,
+
+117
+00:07:32.062 --> 00:07:38.724
+the hinge loss is going to be max of 0,
+1- y times a transpose x + b.
+
+118
+00:07:38.724 --> 00:07:44.671
+Imagine, we get this example wrong, Right?
+
+119
+00:07:44.671 --> 00:07:49.733
+If a has a small magnitude, then the hinge
+loss will be small for that example.
+
+120
+00:07:49.733 --> 00:07:51.200
+Now, what is that telling me?
+
+121
+00:07:51.200 --> 00:07:56.638
+What it's telling me is, on balance,
+if it's difficult to choose a classifier,
+
+122
+00:07:56.638 --> 00:08:00.988
+choose the one that has the smallest a,
+because anything you see in
+
+123
+00:08:00.988 --> 00:08:05.830
+the future is going to have a smaller
+hinge loss if you can make the a smaller.
+
+124
+00:08:05.830 --> 00:08:10.866
+Idea, try to get low hinge
+loss on training examples
+
+125
+00:08:10.866 --> 00:08:17.710
+using a small magnitude a, or
+penalize large magnitudes of a.
+
+126
+00:08:17.710 --> 00:08:19.470
+This is known as regularization.
+
+127
+00:08:19.470 --> 00:08:20.320
+So now,
+
+128
+00:08:20.320 --> 00:08:24.750
+we go back to my original form of the cost
+function that I was going to minimize.
+
+129
+00:08:24.750 --> 00:08:26.690
+I'm going to minimize
+the training error cost,
+
+130
+00:08:26.690 --> 00:08:32.590
+which is the average of the hinge losses
+plus some weight times a penalty term.
+
+131
+00:08:32.590 --> 00:08:35.830
+And that penalty term will
+be the magnitude of a.
+
+132
+00:08:37.600 --> 00:08:42.830
+This lambda is sometimes referred
+to as the regularization parameter.
+
+133
+00:08:42.830 --> 00:08:45.260
+By the way,
+the two over here is just for neatness.
+
+134
+00:08:45.260 --> 00:08:48.290
+And when you differentiate,
+you don't have twos knocking around.
+
+135
+00:08:50.220 --> 00:08:52.760
+This Lamda is known as
+the regularization parameter.
+
+136
+00:08:52.760 --> 00:08:56.060
+It balances training error
+against future error.
+
+137
+00:08:56.060 --> 00:09:00.200
+So if lamda is 0, then we're not that
+concerned about future error and
+
+138
+00:09:00.200 --> 00:09:01.880
+we're minimizing training error.
+
+139
+00:09:01.880 --> 00:09:06.330
+If lambda is really big, we don't care
+all that much about this cost, and
+
+140
+00:09:06.330 --> 00:09:08.070
+we try to make a as small as possible.
+
+141
+00:09:08.070 --> 00:09:10.790
+And, in fact, if lambda is big enough,
+a is going to be 0, and
+
+142
+00:09:10.790 --> 00:09:13.290
+it's not going to be a particularly
+interesting classifier.
+
+143
+00:09:13.290 --> 00:09:15.340
+The problem we have is we don't
+know the best choice of lambda.

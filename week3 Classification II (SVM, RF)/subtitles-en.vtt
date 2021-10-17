@@ -1,0 +1,509 @@
+WEBVTT
+
+1
+00:00:02.700 --> 00:00:06.610
+This is David Forsyth from the University of Illinois and
+
+2
+00:00:06.610 --> 00:00:11.680
+we're going to do the linear support vector machine in this movie.
+
+3
+00:00:11.680 --> 00:00:18.985
+So we need a classification rule and I'm going to make the apparently arbitrary,
+
+4
+00:00:18.985 --> 00:00:22.195
+and it may even seem to you unwise decision,
+
+5
+00:00:22.195 --> 00:00:26.660
+to choose a classifier of the following form.
+
+6
+00:00:26.660 --> 00:00:28.200
+I have binary data.
+
+7
+00:00:28.200 --> 00:00:31.085
+There are n pairs of data items,
+
+8
+00:00:31.085 --> 00:00:32.890
+x_i is a feature vector,
+
+9
+00:00:32.890 --> 00:00:35.720
+y_i is the ith class label.
+
+10
+00:00:35.720 --> 00:00:39.615
+And I will assume that y_i is either 1 or -1.
+
+11
+00:00:39.615 --> 00:00:43.295
+Then to predict the sign of y_i for any point x,
+
+12
+00:00:43.295 --> 00:00:45.655
+we use a linear classifier.
+
+13
+00:00:45.655 --> 00:00:47.590
+And for any new data item,
+
+14
+00:00:47.590 --> 00:00:51.632
+I will predict the sign of a transpose x plus B.
+
+15
+00:00:51.632 --> 00:00:55.910
+Now, of course the issue here is choosing a and
+
+16
+00:00:55.910 --> 00:01:02.381
+b such that we get good behavior on future data.
+
+17
+00:01:02.381 --> 00:01:05.380
+Now the first thing to think about is,
+
+18
+00:01:05.380 --> 00:01:06.890
+what does the rule mean?
+
+19
+00:01:06.890 --> 00:01:08.570
+So here's a really easy example,
+
+20
+00:01:08.570 --> 00:01:11.500
+I've got an alien trying to tell males from females.
+
+21
+00:01:11.500 --> 00:01:13.450
+The alien looks at height,
+
+22
+00:01:13.450 --> 00:01:18.040
+the alien can see there's feature x,
+
+23
+00:01:18.040 --> 00:01:23.220
+the height and it predicts male or female as sign of a_x plus B.
+
+24
+00:01:23.220 --> 00:01:24.860
+What is it doing?
+
+25
+00:01:24.860 --> 00:01:33.135
+Well basically there's some point minus b over a.
+
+26
+00:01:33.135 --> 00:01:36.830
+If the height is bigger than that point it makes one prediction,
+
+27
+00:01:36.830 --> 00:01:39.875
+if the height is smaller than that point it makes another prediction.
+
+28
+00:01:39.875 --> 00:01:41.635
+So, on this side,
+
+29
+00:01:41.635 --> 00:01:44.050
+a times height plus b is positive,
+
+30
+00:01:44.050 --> 00:01:47.380
+on that side a times height plus b is negative or
+
+31
+00:01:47.380 --> 00:01:51.215
+the other way round and I'll map those to male and female and I'm done.
+
+32
+00:01:51.215 --> 00:01:53.110
+So here's the second version, more interesting,
+
+33
+00:01:53.110 --> 00:01:55.764
+the alien now has two features.
+
+34
+00:01:55.764 --> 00:01:58.600
+So it's a two dimensional feature vector x and
+
+35
+00:01:58.600 --> 00:02:02.110
+the alien is looking at a transpose x plus b.
+
+36
+00:02:02.110 --> 00:02:06.235
+Now the rules of linear algebra tell me that a is two dimensional as well.
+
+37
+00:02:06.235 --> 00:02:11.685
+The sign changes where a transpose x plus b equals zero.
+
+38
+00:02:11.685 --> 00:02:13.760
+You should know that this is a line.
+
+39
+00:02:13.760 --> 00:02:18.635
+x is a two dimensional variable.
+
+40
+00:02:18.635 --> 00:02:25.302
+I can think about my 2D vector x as a little x coordinate and a little y coordinate.
+
+41
+00:02:25.302 --> 00:02:26.620
+And if you expand this out,
+
+42
+00:02:26.620 --> 00:02:29.740
+you're going to get an equation that looks like something times
+
+43
+00:02:29.740 --> 00:02:33.155
+x plus something times y plus a constant equals zero.
+
+44
+00:02:33.155 --> 00:02:36.125
+You can check that that makes a line.
+
+45
+00:02:36.125 --> 00:02:38.045
+So my alien now,
+
+46
+00:02:38.045 --> 00:02:43.067
+operating in two dimensions,
+
+47
+00:02:43.067 --> 00:02:46.355
+has a bunch of data.
+
+48
+00:02:46.355 --> 00:02:54.730
+Let's write pluses for one category,
+
+49
+00:02:55.790 --> 00:03:00.135
+minuses for the other category,
+
+50
+00:03:00.135 --> 00:03:05.318
+what my alien is doing is choosing a line that separates those two categories.
+
+51
+00:03:05.318 --> 00:03:11.630
+In this case plus on that side and minus on that side.
+
+52
+00:03:11.630 --> 00:03:15.080
+Now what should occur to you is
+
+53
+00:03:15.080 --> 00:03:18.290
+two concerns which basically occur to everybody at this stage.
+
+54
+00:03:18.290 --> 00:03:23.570
+One is, this linear model might very well seem to you to be too simple.
+
+55
+00:03:23.570 --> 00:03:27.050
+Why? Because if you expend a little imagination on it,
+
+56
+00:03:27.050 --> 00:03:31.775
+you can easily draw datasets where a linear model isn't going to help you very much.
+
+57
+00:03:31.775 --> 00:03:35.805
+Your intuition is misleading you there and I'll draw some pictures now.
+
+58
+00:03:35.805 --> 00:03:38.930
+In fact, a strategy that says if it's not working,
+
+59
+00:03:38.930 --> 00:03:42.200
+make the feature vector bigger, is very good.
+
+60
+00:03:42.200 --> 00:03:44.390
+There are some possible constructions but typically you just
+
+61
+00:03:44.390 --> 00:03:47.520
+add features and I'll show you an example in a second.
+
+62
+00:03:47.520 --> 00:03:49.550
+The next question you could ask is,
+
+63
+00:03:49.550 --> 00:03:51.360
+look, this is a really simple model.
+
+64
+00:03:51.360 --> 00:03:53.060
+Why do you expect it to work well?
+
+65
+00:03:53.060 --> 00:03:55.910
+And the answer is, I don't have to estimate a lot of
+
+66
+00:03:55.910 --> 00:03:59.805
+complicated parameters so I'm more likely to get accurate values.
+
+67
+00:03:59.805 --> 00:04:03.980
+Let's go over the linear model is too simple example, our question.
+
+68
+00:04:03.980 --> 00:04:07.195
+So let me go back to my alien.
+
+69
+00:04:07.195 --> 00:04:14.770
+As you recall, the alien was trying to tell male from female thinking about height.
+
+70
+00:04:14.770 --> 00:04:17.120
+So I'll draw that axis for
+
+71
+00:04:17.120 --> 00:04:23.630
+the height variable and we've got the examples in one dimension,
+
+72
+00:04:23.630 --> 00:04:28.060
+so he's got a bunch of female examples over here.
+
+73
+00:04:28.060 --> 00:04:31.730
+It turns out that human females tend to be less tall than human males,
+
+74
+00:04:31.730 --> 00:04:39.800
+so we sort of expect and mostly would see data distributions that look a bit like this.
+
+75
+00:04:39.800 --> 00:04:43.446
+The taller ones tend to be male or the males tend to be taller,
+
+76
+00:04:43.446 --> 00:04:46.514
+the females tend to be shorter but you're not guaranteed,
+
+77
+00:04:46.514 --> 00:04:49.120
+there are some short males and some tall females.
+
+78
+00:04:49.120 --> 00:04:52.485
+What my alien could do is say, let me add a feature.
+
+79
+00:04:52.485 --> 00:04:55.910
+Now for that, we want a second drawing.
+
+80
+00:04:55.910 --> 00:05:00.635
+The alien, being a well-informed sort of alien as aliens are,
+
+81
+00:05:00.635 --> 00:05:07.945
+adds another relatively simple feature and the feature is the number of y chromosomes.
+
+82
+00:05:07.945 --> 00:05:11.780
+So here is height and
+
+83
+00:05:11.780 --> 00:05:16.765
+here is the number of y chromosomes which mostly is either zero or one.
+
+84
+00:05:16.765 --> 00:05:19.250
+There's some other odd cases but we'll ignore those.
+
+85
+00:05:19.250 --> 00:05:21.890
+The deal here is that the males always
+
+86
+00:05:21.890 --> 00:05:26.510
+have one y chromosome and they tend to be a bit tall,
+
+87
+00:05:26.510 --> 00:05:31.847
+so I'll put them over here,
+
+88
+00:05:31.847 --> 00:05:36.170
+and the females always have zero y chromosomes.
+
+89
+00:05:36.170 --> 00:05:40.200
+Again we're leaving out some genetically slightly odd cases.
+
+90
+00:05:40.200 --> 00:05:42.540
+Usually it's not a particularly good idea to have
+
+91
+00:05:42.540 --> 00:05:45.930
+more than one or fewer than zero y chromosomes and
+
+92
+00:05:45.930 --> 00:05:49.979
+if you do I'm afraid I'm not talking about you.
+
+93
+00:05:49.979 --> 00:05:53.480
+Now, my alien has no problem at all.
+
+94
+00:05:53.480 --> 00:05:55.085
+By inserting one feature,
+
+95
+00:05:55.085 --> 00:05:56.255
+he can choose or,
+
+96
+00:05:56.255 --> 00:06:00.825
+the alien can choose a line that separates these two populations just fine thank you.
+
+97
+00:06:00.825 --> 00:06:02.410
+For example that line.
+
+98
+00:06:02.410 --> 00:06:05.270
+Now this principle operates more generally.
+
+99
+00:06:05.270 --> 00:06:07.455
+Here's another possible example that might worry you.
+
+100
+00:06:07.455 --> 00:06:10.555
+Many people come up with this one.
+
+101
+00:06:10.555 --> 00:06:15.343
+Here's a two dimensional data set that would be really difficult,
+
+102
+00:06:15.343 --> 00:06:22.210
+where it would be really difficult to separate the pluses and
+
+103
+00:06:22.210 --> 00:06:30.099
+the minuses with a line.
+
+104
+00:06:30.099 --> 00:06:32.274
+Now what am I going to do about that?
+
+105
+00:06:32.274 --> 00:06:36.110
+The sensible answer always is add more features.
+
+106
+00:06:36.110 --> 00:06:40.910
+So what I could do is add a simple feature and the simple feature is going to
+
+107
+00:06:40.910 --> 00:06:47.061
+be distance of a data point from the origin.
+
+108
+00:06:47.061 --> 00:06:48.870
+Now we could plot
+
+109
+00:06:48.870 --> 00:06:53.675
+the new three dimensional dataset or I suppose you could visualize it without a plot.
+
+110
+00:06:53.675 --> 00:06:57.095
+But let me try and plot it because I think it's drawable.
+
+111
+00:06:57.095 --> 00:07:00.130
+What am I going to see?
+
+112
+00:07:00.130 --> 00:07:08.690
+Well my pluses are close to the origin so they're going to be low in this new future.
+
+113
+00:07:08.690 --> 00:07:12.653
+My minuses however, are rather far from the origin.
+
+114
+00:07:12.653 --> 00:07:21.095
+So they're going to be up here floating around on some large radius plane.
+
+115
+00:07:21.095 --> 00:07:26.490
+And I should be able to separate these two by
+
+116
+00:07:26.490 --> 00:07:33.721
+a plane that looks at the distance from the origin.
+
+117
+00:07:33.721 --> 00:07:36.620
+So mostly, if you're in trouble with
+
+118
+00:07:36.620 --> 00:07:40.750
+a linear rule like this if you add features, you'll get out of trouble.
+
+119
+00:07:40.750 --> 00:07:42.480
+So we're just not going to worry about
+
+120
+00:07:42.480 --> 00:07:45.625
+this question of the rule being too simple because it isn't.
+
+121
+00:07:45.625 --> 00:07:48.090
+That brings us to a small piece of terminology.
+
+122
+00:07:48.090 --> 00:07:53.935
+A support vector machine is a linear classifier trained with the hinge loss.
+
+123
+00:07:53.935 --> 00:08:02.850
+When I say linear classifier I mean a classifier that does sign of a transpose x plus b.
+
+124
+00:08:02.850 --> 00:08:05.205
+They're usually called SVMs.
+
+125
+00:08:05.205 --> 00:08:08.490
+There are a variety of other things you can do that are also
+
+126
+00:08:08.490 --> 00:08:12.466
+called SVMs but predominantly,
+
+127
+00:08:12.466 --> 00:08:15.250
+that, trained with a hinge loss, is an SVM.
